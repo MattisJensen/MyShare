@@ -21,6 +21,10 @@ object LocalData {
         return users.find { it.id == id }
     }
 
+    fun getAllUsers(): List<MockDBUser> {
+        return users
+    }
+
     fun addGroup(group: MockDBGroup): Boolean {
         return if (groups.any { it.id == group.id }) {
             false // Group already exists
@@ -47,7 +51,6 @@ object LocalData {
     }
 
 
-
     init {
         // add mock users
         val firstNames = listOf("Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Hannah", "Ivy", "Jack", "Karen", "Leo", "Mona", "Nina", "Oscar", "Paul", "Quinn", "Rita", "Sam", "Tina", "Uma", "Vince", "Wendy", "Xander", "Yara", "Zane")
@@ -56,12 +59,14 @@ object LocalData {
             val firstName = firstNames[(i - 1) % firstNames.size]
             val lastName = lastNames[(i - 1) % lastNames.size]
             val fullName = "$firstName $lastName"
-            users.add(MockDBUser(
-                id = i,
-                name = fullName,
-                email = "$firstName.$lastName@example.com",
-                password = "password$i"
-            ))
+            users.add(
+                MockDBUser(
+                    id = i,
+                    name = fullName,
+                    email = "$firstName.$lastName@example.com",
+                    password = "password$i"
+                )
+            )
         }
 
         // add mock groups with fun names and 2 to 7 members
@@ -69,12 +74,14 @@ object LocalData {
         for (i in 1..10) {
             val memberCount = (2..16).random()
             val members = (1..40).shuffled().take(memberCount).toMutableList()
-            groups.add(MockDBGroup(
-                id = i,
-                name = groupNames[(i - 1) % groupNames.size],
-                groupBalance = 0.0,
-                members = members
-            ))
+            groups.add(
+                MockDBGroup(
+                    id = i,
+                    name = groupNames[(i - 1) % groupNames.size],
+                    groupBalance = 0.0,
+                    members = members
+                )
+            )
         }
     }
 }

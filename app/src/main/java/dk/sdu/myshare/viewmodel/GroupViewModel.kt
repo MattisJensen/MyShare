@@ -15,16 +15,15 @@ import dk.sdu.myshare.view.GroupView
 import kotlin.math.pow
 import kotlin.random.Random
 
-class GroupViewModel(
-    private val userRepository: UserRepository,
-    private val groupRepository: GroupRepository
-) : ViewModel() {
-    private val _userData: MutableLiveData<List<UserData>> =
-        MutableLiveData<List<UserData>>(emptyList())
+class GroupViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository) : ViewModel() {
+    private val _userData: MutableLiveData<List<UserData>> = MutableLiveData<List<UserData>>(emptyList())
     val userData: LiveData<List<UserData>> = _userData
 
     private val _groupData: MutableLiveData<GroupData> = MutableLiveData<GroupData>()
     val groupData: LiveData<GroupData> = _groupData
+
+    private val _addUserToGroupCandidates = MutableLiveData<Map<UserData, Boolean>>()
+    val addUserToGroupCandidates: LiveData<Map<UserData, Boolean>> get() = _addUserToGroupCandidates
 
     private val generatedUserColors: MutableMap<Int, Color> = mutableMapOf()
 
@@ -64,11 +63,25 @@ class GroupViewModel(
         _userData.postValue(currentUsers)
     }
 
+    fun refreshAddUserToGroupCandidates() {
+        if (groupData.value == null) {
+            return
+        }
+
+        val addUserToGroupCandidates: MutableMap<UserData, Boolean> = mutableMapOf()
+        val allUsers: List<UserData> = userRepository.fetchAllUsers() ?: emptyList()
+
+        // add each user to the map with a boolean value indicating if they are already in the group. True if they are, false if they are not.
+        allUsers.forEach { user ->
+            addUserToGroupCandidates[user] = groupData.value?.members?.contains(user.id) ?: false
+        }
+
+        _addUserToGroupCandidates.postValue(addUserToGroupCandidates)
+    }
+
     fun addUserToGroup(userID: Int): Boolean {
         groupData.value?.id?.let { groupID ->
             refreshCurrentGroup()
-//            refreshCurrentGroupMembers()
-
             return groupRepository.addUserToGroup(userID, groupID)
         }
         return false

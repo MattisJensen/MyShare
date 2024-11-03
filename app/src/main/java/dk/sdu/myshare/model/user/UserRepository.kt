@@ -17,6 +17,17 @@ class UserRepository {
         return null
     }
 
+    fun fetchAllUsers(): List<UserData>? {
+        return LocalData.getAllUsers()?.map {
+            UserData(
+                id = it.id,
+                name = it.name,
+                email = it.email,
+                password = it.password
+            )
+        }
+    }
+
     fun addUser(user: UserData): Boolean {
         return LocalData.addUser(
             MockDBUser(
