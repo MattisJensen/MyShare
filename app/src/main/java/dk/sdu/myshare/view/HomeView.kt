@@ -13,6 +13,6 @@ fun HomeView(modifier: Modifier = Modifier, dependencyInjectionContainer: Depend
 @Preview(showBackground = true)
 @Composable
 fun PreviewHomeView() {
-    val dependencyInjectionContainer = DependencyInjectionContainer()
+    val dependencyInjectionContainer: DependencyInjectionContainer = DependencyInjectionContainer()
     HomeView(modifier = Modifier, dependencyInjectionContainer = dependencyInjectionContainer)
 }

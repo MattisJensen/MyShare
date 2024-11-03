@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import dk.sdu.myshare.di.DependencyInjectionContainer
 import dk.sdu.myshare.viewmodel.GroupViewModel
 
 @Composable
@@ -30,4 +32,12 @@ fun GroupView(viewModel: GroupViewModel) {
             Text(text = it)
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewGroupView() {
+    val dependencyInjectionContainer: DependencyInjectionContainer = DependencyInjectionContainer()
+    val groupViewModel: GroupViewModel = dependencyInjectionContainer.groupViewModel
+    GroupView(viewModel = groupViewModel)
 }
