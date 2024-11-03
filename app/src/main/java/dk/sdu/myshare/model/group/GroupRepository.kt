@@ -1,14 +1,22 @@
 package dk.sdu.myshare.model.group
 
-import dk.sdu.myshare.model.user.UserData
+import dk.sdu.myshare.model.database.mock.LocalData
 
 class GroupRepository {
-    fun fetchGroupData(): GroupData {
-        return GroupData (
-            id = 1,
-            name = "My Group",
-            groupBalance = 0.0,
-            members = listOf(1, 2, 3)
-        )
+    fun fetchGroupDataByID(id: Int): GroupData? {
+        LocalData.getGroupById(id)?.let {
+            return GroupData(
+                id = it.id,
+                name = it.name,
+                groupBalance = it.groupBalance,
+                members = it.members
+            )
+        }
+
+        return null
+    }
+
+    fun addUserToGroup(userID: Int, groupID: Int): Boolean {
+        return LocalData.addUserToGroup(userID, groupID)
     }
 }
