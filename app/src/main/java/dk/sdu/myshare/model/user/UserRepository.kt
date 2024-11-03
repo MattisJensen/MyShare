@@ -1,4 +1,4 @@
-package dk.sdu.myshare.model
+package dk.sdu.myshare.model.user
 
 class UserRepository {
     fun fetchUserData(): UserData {
