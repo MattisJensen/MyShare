@@ -68,16 +68,14 @@ fun GroupHeader(viewModel: GroupViewModel) {
                 content = {
                     BoxWithConstraints(
                         modifier = Modifier
-                            .weight(1f)
-//                            .padding(end = 4.dp)
-                        ,
+                            .weight(1f),
                         content = {
                             val width = constraints.maxWidth.toFloat()
                             val startX = width - 150f
                             val endX = width
 
                             GroupMembers(viewModel = viewModel)
-                            Box (
+                            Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(40.dp)
@@ -117,9 +115,18 @@ fun GroupInformation(viewModel: GroupViewModel) {
         verticalAlignment = Alignment.CenterVertically,
 
         content = {
-            TextElement(groupData.value?.name ?: "No group name yet")
-            TextElement("Balance: ${groupData.value?.groupBalance ?: 0.00} dkk")
+            GroupInfoText(groupData.value?.name ?: "No group name yet")
+            GroupInfoText("DKK ${groupData.value?.groupBalance ?: 0.00}")
         }
+    )
+}
+
+@Composable
+fun GroupInfoText(text: String) {
+    Text(
+        text = text,
+        fontWeight = FontWeight.Bold,
+        style = MaterialTheme.typography.titleMedium
     )
 }
 
@@ -138,7 +145,7 @@ fun GroupMembers(viewModel: GroupViewModel, modifier: Modifier = Modifier) {
                     color = viewModel.getTemporaryUserColor(it.id),
                     {}
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(10.dp))
             }
 
 
@@ -163,15 +170,6 @@ fun GroupMemberIcon(name: String, color: Color, onClick: () -> Unit) {
                 color = Color.White
             )
         }
-    )
-}
-
-@Composable
-fun TextElement(text: String) {
-    Text(
-        text = text,
-        fontWeight = FontWeight.Bold,
-        style = MaterialTheme.typography.titleMedium
     )
 }
 
