@@ -10,12 +10,12 @@ object ViewModelFactory {
         return HomeViewModel()
     }
 
-    fun getSelectedGroupViewModel(): SelectedGroupViewModel {
-        return SelectedGroupViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository)
+    fun getSelectedGroupViewModel(groupId: Int): SelectedGroupViewModel {
+        return SelectedGroupViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository, groupId)
     }
 
-    fun getManageGroupMemberViewModel(): ManageGroupMemberViewModel {
-        return ManageGroupMemberViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository)
+    fun getManageGroupMemberViewModel(groupId: Int): ManageGroupMemberViewModel {
+        return ManageGroupMemberViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository, groupId)
     }
 
     fun getProfileViewModel(profileUserId: Int): ProfileViewModel {

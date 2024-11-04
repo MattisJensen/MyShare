@@ -16,7 +16,7 @@ import dk.sdu.myshare.business.utility.ProfileFormatter
 import dk.sdu.myshare.business.utility.ViewModelFactory
 import dk.sdu.myshare.presentation.group.selectedgroup.view.GroupView
 
-class SelectedGroupViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository) : ViewModel() {
+class SelectedGroupViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository, private val selectedGroupId: Int) : ViewModel() {
     private val _userData: MutableLiveData<List<UserData>> = MutableLiveData<List<UserData>>(emptyList())
     val userData: LiveData<List<UserData>> = _userData
 
@@ -40,8 +40,7 @@ class SelectedGroupViewModel(private val userRepository: UserRepository, private
     }
 
     fun refreshCurrentGroup() {
-        // FIXME: Hardcoded group ID instead of using the current opened group
-        val groupDataResult: GroupData? = groupRepository.fetchGroupDataByID(1)
+        val groupDataResult: GroupData? = groupRepository.fetchGroupDataByID(selectedGroupId)
         groupDataResult?.let {
             _groupData.postValue(it)
         }
@@ -95,6 +94,6 @@ class SelectedGroupViewModel(private val userRepository: UserRepository, private
 @Preview(showBackground = true)
 @Composable
 fun PreviewGroupView() {
-    val selectedGroupViewModel: SelectedGroupViewModel = ViewModelFactory.getSelectedGroupViewModel()
+    val selectedGroupViewModel: SelectedGroupViewModel = ViewModelFactory.getSelectedGroupViewModel(1)
     GroupView(viewModel = selectedGroupViewModel)
 }

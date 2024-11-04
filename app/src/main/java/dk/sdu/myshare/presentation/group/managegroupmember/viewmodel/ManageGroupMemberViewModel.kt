@@ -11,11 +11,11 @@ import dk.sdu.myshare.business.model.group.GroupRepository
 import dk.sdu.myshare.business.model.user.UserData
 import dk.sdu.myshare.business.model.user.UserRepository
 import dk.sdu.myshare.business.utility.ColorGenerator
-import dk.sdu.myshare.business.utility.DependencyInjectionContainer
 import dk.sdu.myshare.business.utility.ProfileFormatter
+import dk.sdu.myshare.business.utility.ViewModelFactory
 import dk.sdu.myshare.presentation.group.managegroupmember.view.ManageGroupMemberView
 
-class ManageGroupMemberViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository) : ViewModel() {
+class ManageGroupMemberViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository, private val selectedGroupId: Int) : ViewModel() {
     private val _addUserToGroupCandidates = MutableLiveData<Map<UserData, Boolean>>()
     val addUserToGroupCandidates: LiveData<Map<UserData, Boolean>> get() = _addUserToGroupCandidates
 
@@ -34,12 +34,10 @@ class ManageGroupMemberViewModel(private val userRepository: UserRepository, pri
     }
 
     fun refreshCurrentGroup() {
-        // FIXME: Hardcoded group ID instead of using the current opened group
-        val groupDataResult: GroupData? = groupRepository.fetchGroupDataByID(1)
+        val groupDataResult: GroupData? = groupRepository.fetchGroupDataByID(selectedGroupId)
         groupDataResult?.let {
             _groupData.postValue(it)
         }
-        refreshAddUserToGroupCandidates() // FIXME: Only for preview not for production
     }
 
     fun refreshAddUserToGroupCandidates() {
@@ -96,6 +94,6 @@ class ManageGroupMemberViewModel(private val userRepository: UserRepository, pri
 @Preview(showBackground = true)
 @Composable
 fun PreviewUserSearchView() {
-    val manageGroupMemberViewModel = ManageGroupMemberViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository)
+    val manageGroupMemberViewModel = ViewModelFactory.getManageGroupMemberViewModel(1)
     ManageGroupMemberView(viewModel = manageGroupMemberViewModel, {})
 }
