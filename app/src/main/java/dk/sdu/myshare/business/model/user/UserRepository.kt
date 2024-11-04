@@ -4,7 +4,7 @@ import dk.sdu.myshare.data.database.mock.LocalData
 import dk.sdu.myshare.data.database.mock.tables.MockDBUser
 
 class UserRepository {
-    fun fetchUserDataByID(id: Int): UserData? {
+    fun fetchUserByID(id: Int): UserData? {
         LocalData.getUserById(id)?.let {
             return UserData(
                 id = it.id,

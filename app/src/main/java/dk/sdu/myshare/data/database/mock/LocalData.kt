@@ -1,5 +1,6 @@
 package dk.sdu.myshare.data.database.mock
 
+import dk.sdu.myshare.data.database.mock.tables.MockDBFriendship
 import dk.sdu.myshare.data.database.mock.tables.MockDBGroup
 import dk.sdu.myshare.data.database.mock.tables.MockDBUser
 
@@ -10,7 +11,10 @@ import dk.sdu.myshare.data.database.mock.tables.MockDBUser
 object LocalData {
     private val users = mutableListOf<MockDBUser>()
     private val groups = mutableListOf<MockDBGroup>()
+    private val friendships = mutableListOf<MockDBFriendship>()
 
+
+    /* User functions */
     fun addUser(user: MockDBUser): Boolean {
         return if (users.any { it.id == user.id }) {
             false // User already exists
@@ -28,6 +32,7 @@ object LocalData {
         return users
     }
 
+    /* Group functions */
     fun addGroup(group: MockDBGroup): Boolean {
         return if (groups.any { it.id == group.id }) {
             false // Group already exists
@@ -41,7 +46,7 @@ object LocalData {
         return groups.find { it.id == id }
     }
 
-    fun addUserToGroup(userId: Int, groupId: Int): Boolean {
+    fun addUserToGroupById(userId: Int, groupId: Int): Boolean {
         val group: MockDBGroup = getGroupById(groupId) ?: return false
         val user: MockDBUser = getUserById(userId) ?: return false
 
@@ -53,7 +58,7 @@ object LocalData {
         return true
     }
 
-    fun removeUserFromGroup(userId: Int, groupId: Int): Boolean {
+    fun removeUserFromGroupById(userId: Int, groupId: Int): Boolean {
         val group: MockDBGroup = getGroupById(groupId) ?: return false
         val user: MockDBUser = getUserById(userId) ?: return false
 
@@ -62,6 +67,34 @@ object LocalData {
         }
 
         group.members.remove(userId)
+        return true
+    }
+
+    /* Friendship functions */
+    fun getFriendshipsForUserById(userId: Int): List<MockDBFriendship> {
+        getUserById(userId)?.let {
+            return friendships.filter { it.userId1 == userId || it.userId2 == userId }
+        } ?: return emptyList()
+    }
+
+    fun isFriendById(user1Id: Int, user2Id: Int): Boolean {
+        return friendships.any { (it.userId1 == user1Id && it.userId2 == user2Id) || (it.userId1 == user2Id && it.userId2 == user1Id) }
+    }
+
+    fun addFriendshipById(user1Id: Int, user2Id: Int): Boolean {
+        if (user1Id == user2Id) {
+            return false
+        }
+
+        // check if users exist
+        val user1: MockDBUser = getUserById(user1Id) ?: return false
+        val user2: MockDBUser = getUserById(user2Id) ?: return false
+
+        if (isFriendById(user1Id, user2Id)) {
+            return false
+        }
+
+        friendships.add(MockDBFriendship(user1Id, user2Id))
         return true
     }
 
@@ -97,6 +130,15 @@ object LocalData {
                     members = members
                 )
             )
+        }
+
+        // add mock friendships
+        for (i in 1..40) {
+            val friendCount = (1..5).random()
+            val friends = (1..40).shuffled().take(friendCount)
+            friends.forEach { friendId ->
+                friendships.add(MockDBFriendship(i, friendId))
+            }
         }
     }
 }

@@ -17,10 +17,10 @@ class GroupRepository {
     }
 
     fun addUserToGroup(userID: Int, groupID: Int): Boolean {
-        return LocalData.addUserToGroup(userID, groupID)
+        return LocalData.addUserToGroupById(userID, groupID)
     }
 
     fun removeUserFromGroup(userID: Int, groupID: Int): Boolean {
-        return LocalData.removeUserFromGroup(userID, groupID)
+        return LocalData.removeUserFromGroupById(userID, groupID)
     }
 }
