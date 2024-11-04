@@ -2,7 +2,7 @@ package dk.sdu.myshare.business.utility
 
 import dk.sdu.myshare.business.model.group.GroupRepository
 import dk.sdu.myshare.business.model.user.UserRepository
-import dk.sdu.myshare.presentation.group.opengroup.viewmodel.GroupViewModel
+import dk.sdu.myshare.presentation.group.selectedgroup.viewmodel.GroupViewModel
 
 class DependencyInjectionContainer {
     /* repos */

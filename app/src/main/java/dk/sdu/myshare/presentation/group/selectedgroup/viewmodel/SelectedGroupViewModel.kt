@@ -1,4 +1,4 @@
-package dk.sdu.myshare.presentation.group.opengroup.viewmodel
+package dk.sdu.myshare.presentation.group.selectedgroup.viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -11,7 +11,7 @@ import dk.sdu.myshare.business.model.group.GroupData
 import dk.sdu.myshare.business.model.group.GroupRepository
 import dk.sdu.myshare.business.model.user.UserData
 import dk.sdu.myshare.business.model.user.UserRepository
-import dk.sdu.myshare.presentation.group.opengroup.view.GroupView
+import dk.sdu.myshare.presentation.group.selectedgroup.view.GroupView
 import kotlin.math.pow
 import kotlin.random.Random
 

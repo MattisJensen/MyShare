@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dk.sdu.myshare.business.utility.DependencyInjectionContainer
-import dk.sdu.myshare.presentation.group.opengroup.view.GroupView
+import dk.sdu.myshare.presentation.group.selectedgroup.view.GroupView
 
 @Composable
 fun HomeView(

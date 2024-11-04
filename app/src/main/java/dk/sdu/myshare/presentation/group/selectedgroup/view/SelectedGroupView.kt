@@ -1,4 +1,4 @@
-package dk.sdu.myshare.presentation.group.opengroup.view
+package dk.sdu.myshare.presentation.group.selectedgroup.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dk.sdu.myshare.business.utility.DependencyInjectionContainer
 import dk.sdu.myshare.presentation.group.managegroupmember.view.UserSearchView
-import dk.sdu.myshare.presentation.group.opengroup.viewmodel.GroupViewModel
+import dk.sdu.myshare.presentation.group.selectedgroup.viewmodel.GroupViewModel
 
 @Composable
 fun GroupView(viewModel: GroupViewModel) {

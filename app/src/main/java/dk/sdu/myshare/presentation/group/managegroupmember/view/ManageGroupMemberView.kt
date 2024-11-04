@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dk.sdu.myshare.business.utility.DependencyInjectionContainer
-import dk.sdu.myshare.presentation.group.opengroup.viewmodel.GroupViewModel
+import dk.sdu.myshare.presentation.group.selectedgroup.viewmodel.GroupViewModel
 
 @Composable
 fun UserSearchView(viewModel: GroupViewModel) {
