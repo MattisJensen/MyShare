@@ -23,7 +23,7 @@ class SelectedGroupViewModel(private val userRepository: UserRepository, private
     val groupData: LiveData<GroupData> = _groupData
 
     private val _showUserSearch = MutableLiveData(false)
-    val showUserSearch: LiveData<Boolean> get() = _showUserSearch
+    val showUserSearch: LiveData<Boolean> = _showUserSearch
 
     private val generatedUserColors: MutableMap<Int, Color> = mutableMapOf()
 
@@ -54,7 +54,7 @@ class SelectedGroupViewModel(private val userRepository: UserRepository, private
         val currentUsers: MutableList<UserData> = mutableListOf()
 
         groupData.value?.members?.forEach { memberID ->
-            val userDataResult: UserData? = userRepository.fetchUserDataByID(memberID)
+            val userDataResult: UserData? = userRepository.fetchUserByID(memberID)
             userDataResult?.let {
                 currentUsers.add(it)
             }

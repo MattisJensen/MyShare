@@ -16,7 +16,6 @@ object DependencyInjectionContainer {
     /* view models */
     val selectedGroupViewModel: SelectedGroupViewModel
     val manageGroupMemberViewModel: ManageGroupMemberViewModel
-    val profileViewModel: ProfileViewModel
 
     init {
         /* repos */
@@ -27,6 +26,9 @@ object DependencyInjectionContainer {
         /* view models */
         selectedGroupViewModel = SelectedGroupViewModel(userRepository, groupRepository)
         manageGroupMemberViewModel = ManageGroupMemberViewModel(userRepository, groupRepository)
-        profileViewModel = ProfileViewModel(userRepository, friendshipRepository)
+    }
+
+    fun getProfileViewModel(profileUserId: Int): ProfileViewModel {
+        return ProfileViewModel(userRepository, groupRepository, friendshipRepository, profileUserId)
     }
 }

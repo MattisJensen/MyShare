@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dk.sdu.myshare.business.model.user.UserData
 import dk.sdu.myshare.business.utility.DependencyInjectionContainer
+import dk.sdu.myshare.data.database.mock.LocalData
 import dk.sdu.myshare.presentation.group.managegroupmember.viewmodel.ManageGroupMemberViewModel
 import dk.sdu.myshare.presentation.group.selectedgroup.view.GroupMemberIcon
 import dk.sdu.myshare.presentation.group.selectedgroup.view.GroupMembers
@@ -174,12 +175,7 @@ fun EditButton(onClick: () -> Unit, color: Color, icon: ImageVector) {
 
 @Preview(showBackground = true)
 @Composable
-fun UserListPreview() {
+fun PreviewUserSearchView() {
     val manageGroupMemberViewModel = ManageGroupMemberViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository)
-    UserList(filteredCandidates = listOf(Pair(UserData(1, "John Doe", "test@mail.dk", "123"), false)), viewModel = manageGroupMemberViewModel, {})
+    UserSearchView(viewModel = manageGroupMemberViewModel, {})
 }
-//@Composable
-//fun PreviewUserSearchView() {
-//    val manageGroupMemberViewModel = ManageGroupMemberViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository)
-//    UserSearchView(viewModel = manageGroupMemberViewModel, {})
-//}
