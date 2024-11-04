@@ -3,7 +3,6 @@ package dk.sdu.myshare.presentation.group.managegroupmember.view
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,8 +18,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -39,14 +36,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dk.sdu.myshare.business.model.user.UserData
 import dk.sdu.myshare.business.utility.DependencyInjectionContainer
-import dk.sdu.myshare.data.database.mock.LocalData
 import dk.sdu.myshare.presentation.group.managegroupmember.viewmodel.ManageGroupMemberViewModel
 import dk.sdu.myshare.presentation.group.selectedgroup.view.GroupMemberIcon
-import dk.sdu.myshare.presentation.group.selectedgroup.view.GroupMembers
-import dk.sdu.myshare.presentation.group.selectedgroup.viewmodel.SelectedGroupViewModel
 
 @Composable
-fun UserSearchView(viewModel: ManageGroupMemberViewModel, onClose: () -> Unit) {
+fun ManageGroupMemberView(viewModel: ManageGroupMemberViewModel, onClose: () -> Unit) {
     viewModel.onViewLoad()
 
     val addUserToGroupCandidates by viewModel.addUserToGroupCandidates.observeAsState(emptyMap())
@@ -177,5 +171,5 @@ fun EditButton(onClick: () -> Unit, color: Color, icon: ImageVector) {
 @Composable
 fun PreviewUserSearchView() {
     val manageGroupMemberViewModel = ManageGroupMemberViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository)
-    UserSearchView(viewModel = manageGroupMemberViewModel, {})
+    ManageGroupMemberView(viewModel = manageGroupMemberViewModel, {})
 }

@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dk.sdu.myshare.business.utility.DependencyInjectionContainer
+import dk.sdu.myshare.business.utility.ViewModelFactory
 import dk.sdu.myshare.presentation.group.selectedgroup.viewmodel.SelectedGroupViewModel
 
 @Composable
@@ -176,6 +177,6 @@ fun GroupMemberIcon(name: String, color: Color, onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewGroupHeader() {
-    val selectedGroupViewModel: SelectedGroupViewModel = DependencyInjectionContainer.selectedGroupViewModel
+    val selectedGroupViewModel: SelectedGroupViewModel = ViewModelFactory.getSelectedGroupViewModel()
     GroupHeader(viewModel = selectedGroupViewModel)
 }

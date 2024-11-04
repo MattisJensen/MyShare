@@ -38,5 +38,8 @@ class ProfileViewModel(private val userRepository: UserRepository, private val g
         friendshipRepository.addFriendship(currentUserId, profileUserId)
     }
 
-   
+    // get groups of current user
+//    fun getGroups(): List<String> {
+//        return userRepository.fetchUserByID(profileUserId)?.groups ?: emptyList()
+//    }
 }

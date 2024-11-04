@@ -11,13 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import dk.sdu.myshare.business.utility.DependencyInjectionContainer
-import dk.sdu.myshare.presentation.group.managegroupmember.view.UserSearchView
+import dk.sdu.myshare.business.utility.ViewModelFactory
+import dk.sdu.myshare.presentation.group.managegroupmember.view.ManageGroupMemberView
 import dk.sdu.myshare.presentation.group.selectedgroup.viewmodel.SelectedGroupViewModel
 
 @Composable
 fun GroupView(viewModel: SelectedGroupViewModel) {
     if (viewModel.showUserSearch.observeAsState(false).value) {
-        UserSearchView(viewModel = DependencyInjectionContainer.manageGroupMemberViewModel, {viewModel.userSearchOnClose()})
+        ManageGroupMemberView(viewModel = ViewModelFactory.getManageGroupMemberViewModel(), {viewModel.userSearchOnClose()})
     } else {
         Column(
             modifier = Modifier
@@ -36,6 +37,6 @@ fun GroupView(viewModel: SelectedGroupViewModel) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewGroupView() {
-    val selectedGroupViewModel: SelectedGroupViewModel = DependencyInjectionContainer.selectedGroupViewModel
+    val selectedGroupViewModel: SelectedGroupViewModel = ViewModelFactory.getSelectedGroupViewModel()
     GroupView(viewModel = selectedGroupViewModel)
 }

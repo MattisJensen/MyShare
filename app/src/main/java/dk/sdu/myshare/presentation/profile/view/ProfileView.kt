@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dk.sdu.myshare.R
 import dk.sdu.myshare.business.utility.DependencyInjectionContainer
+import dk.sdu.myshare.business.utility.ViewModelFactory
 import dk.sdu.myshare.presentation.profile.viewmodel.ProfileViewModel
 
 
@@ -90,5 +91,5 @@ fun ProfileView(viewModel: ProfileViewModel) {
 @Preview
 @Composable
 fun ProfileViewPreview() {
-    ProfileView(DependencyInjectionContainer.getProfileViewModel(1))
+    ProfileView(ViewModelFactory.getProfileViewModel(1))
 }

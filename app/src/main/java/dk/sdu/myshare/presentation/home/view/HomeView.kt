@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dk.sdu.myshare.business.utility.DependencyInjectionContainer
+import dk.sdu.myshare.business.utility.ViewModelFactory
 import dk.sdu.myshare.presentation.group.selectedgroup.view.GroupView
 
 @Composable
@@ -12,7 +13,7 @@ fun HomeView(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         content = {
-            GroupView(DependencyInjectionContainer.selectedGroupViewModel)
+            GroupView(ViewModelFactory.getSelectedGroupViewModel())
         }
     )
 }

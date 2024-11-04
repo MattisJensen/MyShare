@@ -13,7 +13,7 @@ import dk.sdu.myshare.business.model.user.UserRepository
 import dk.sdu.myshare.business.utility.ColorGenerator
 import dk.sdu.myshare.business.utility.DependencyInjectionContainer
 import dk.sdu.myshare.business.utility.ProfileFormatter
-import dk.sdu.myshare.presentation.group.managegroupmember.view.UserSearchView
+import dk.sdu.myshare.presentation.group.managegroupmember.view.ManageGroupMemberView
 
 class ManageGroupMemberViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository) : ViewModel() {
     private val _addUserToGroupCandidates = MutableLiveData<Map<UserData, Boolean>>()
@@ -97,5 +97,5 @@ class ManageGroupMemberViewModel(private val userRepository: UserRepository, pri
 @Composable
 fun PreviewUserSearchView() {
     val manageGroupMemberViewModel = ManageGroupMemberViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository)
-    UserSearchView(viewModel = manageGroupMemberViewModel, {})
+    ManageGroupMemberView(viewModel = manageGroupMemberViewModel, {})
 }

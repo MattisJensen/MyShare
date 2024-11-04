@@ -13,6 +13,7 @@ import dk.sdu.myshare.business.model.user.UserData
 import dk.sdu.myshare.business.model.user.UserRepository
 import dk.sdu.myshare.business.utility.ColorGenerator
 import dk.sdu.myshare.business.utility.ProfileFormatter
+import dk.sdu.myshare.business.utility.ViewModelFactory
 import dk.sdu.myshare.presentation.group.selectedgroup.view.GroupView
 
 class SelectedGroupViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository) : ViewModel() {
@@ -94,6 +95,6 @@ class SelectedGroupViewModel(private val userRepository: UserRepository, private
 @Preview(showBackground = true)
 @Composable
 fun PreviewGroupView() {
-    val selectedGroupViewModel: SelectedGroupViewModel = DependencyInjectionContainer.selectedGroupViewModel
+    val selectedGroupViewModel: SelectedGroupViewModel = ViewModelFactory.getSelectedGroupViewModel()
     GroupView(viewModel = selectedGroupViewModel)
 }
