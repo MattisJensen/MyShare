@@ -17,7 +17,7 @@ import dk.sdu.myshare.presentation.group.selectedgroup.viewmodel.SelectedGroupVi
 @Composable
 fun GroupView(viewModel: SelectedGroupViewModel) {
     if (viewModel.showUserSearch.observeAsState(false).value) {
-        UserSearchView(viewModel = DependencyInjectionContainer.manageGroupMemberViewModel, {})
+        UserSearchView(viewModel = DependencyInjectionContainer.manageGroupMemberViewModel, {viewModel.userSearchOnClose()})
     } else {
         Column(
             modifier = Modifier

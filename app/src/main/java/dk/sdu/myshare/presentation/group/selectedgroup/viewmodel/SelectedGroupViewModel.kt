@@ -64,7 +64,7 @@ class SelectedGroupViewModel(private val userRepository: UserRepository, private
 
     fun getTemporaryUserColor(userID: Int): Color {
         if (generatedUserColors.containsKey(userID)) {
-            return generatedUserColors[userID]!!
+            return generatedUserColors[userID]!! // FIXME: Better way to handle this
         }
 
         var color: Color
@@ -78,6 +78,11 @@ class SelectedGroupViewModel(private val userRepository: UserRepository, private
 
     fun setShowUserSearch(show: Boolean) {
         _showUserSearch.value = show
+    }
+
+    fun userSearchOnClose() {
+        setShowUserSearch(false)
+        refreshCurrentGroupMembers()
     }
 
     /**

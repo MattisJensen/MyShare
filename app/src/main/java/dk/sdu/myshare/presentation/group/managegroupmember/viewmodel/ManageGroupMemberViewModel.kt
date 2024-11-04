@@ -23,6 +23,11 @@ class ManageGroupMemberViewModel(private val userRepository: UserRepository, pri
         refreshCurrentGroup()
     }
 
+    fun onViewLoad() {
+        refreshCurrentGroup()
+        refreshAddUserToGroupCandidates()
+    }
+
     fun refreshCurrentGroup() {
         // FIXME: Hardcoded group ID instead of using the current opened group
         val groupDataResult: GroupData? = groupRepository.fetchGroupDataByID(1)

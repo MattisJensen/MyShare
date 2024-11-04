@@ -30,6 +30,8 @@ import dk.sdu.myshare.presentation.group.selectedgroup.viewmodel.SelectedGroupVi
 
 @Composable
 fun UserSearchView(viewModel: ManageGroupMemberViewModel, onClose: () -> Unit) {
+    viewModel.onViewLoad()
+
     val addUserToGroupCandidates by viewModel.addUserToGroupCandidates.observeAsState(emptyMap())
     val searchQuery = remember { mutableStateOf("") }
     val filteredCandidates = addUserToGroupCandidates.filter { it.key.name.contains(searchQuery.value, ignoreCase = true) }.toList()
@@ -48,7 +50,7 @@ fun UserSearchView(viewModel: ManageGroupMemberViewModel, onClose: () -> Unit) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            UserList(filteredCandidates = filteredCandidates, viewModel = viewModel)
+            UserList(filteredCandidates = filteredCandidates, viewModel = viewModel, onClose = onClose)
         }
     )
 }
@@ -64,7 +66,7 @@ fun SearchUserField(value: String, onValueChange: (String) -> Unit) {
 }
 
 @Composable
-fun UserList(filteredCandidates: List<Pair<UserData, Boolean>>, viewModel: ManageGroupMemberViewModel) {
+fun UserList(filteredCandidates: List<Pair<UserData, Boolean>>, viewModel: ManageGroupMemberViewModel, onClose: () -> Unit) {
     LazyColumn {
         items(filteredCandidates) { (user, isInGroup) ->
             Row(
@@ -76,7 +78,7 @@ fun UserList(filteredCandidates: List<Pair<UserData, Boolean>>, viewModel: Manag
                 content = {
                     Text(user.name, modifier = Modifier.weight(1f))
                     if (!isInGroup) {
-                        AddUserButton(viewModel = viewModel, user = user)
+                        AddUserButton(viewModel = viewModel, user = user, onClose)
                     }
                 }
             )
@@ -85,10 +87,11 @@ fun UserList(filteredCandidates: List<Pair<UserData, Boolean>>, viewModel: Manag
 }
 
 @Composable
-fun AddUserButton(viewModel: ManageGroupMemberViewModel, user: UserData) {
+fun AddUserButton(viewModel: ManageGroupMemberViewModel, user: UserData, onClose: () -> Unit) {
     Button(
         onClick = {
             viewModel.addUserToGroup(user.id)
+            onClose()
         },
         content = {
             Text("Add")
