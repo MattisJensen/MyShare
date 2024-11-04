@@ -15,19 +15,13 @@ import dk.sdu.myshare.ui.theme.MyShareTheme
 import dk.sdu.myshare.presentation.home.view.HomeView
 
 class MainActivity : ComponentActivity() {
-    val dependencyInjectionContainer: DependencyInjectionContainer
-
-    init {
-        dependencyInjectionContainer = DependencyInjectionContainer()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             MyShareTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HomeView(Modifier.padding(innerPadding), dependencyInjectionContainer)
+                    HomeView(Modifier.padding(innerPadding))
                 }
             }
         }
@@ -37,11 +31,9 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewMainActivity() {
-    val dependencyInjectionContainer = DependencyInjectionContainer()
-
     MyShareTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            HomeView(Modifier.padding(innerPadding), dependencyInjectionContainer)
+            HomeView(Modifier.padding(innerPadding))
         }
     }
 }

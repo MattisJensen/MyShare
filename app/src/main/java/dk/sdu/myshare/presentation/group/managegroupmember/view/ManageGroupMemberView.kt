@@ -23,59 +23,82 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dk.sdu.myshare.business.model.user.UserData
 import dk.sdu.myshare.business.utility.DependencyInjectionContainer
-import dk.sdu.myshare.presentation.group.selectedgroup.viewmodel.GroupViewModel
+import dk.sdu.myshare.presentation.group.managegroupmember.viewmodel.ManageGroupMemberViewModel
+import dk.sdu.myshare.presentation.group.selectedgroup.viewmodel.SelectedGroupViewModel
 
 @Composable
-fun UserSearchView(viewModel: GroupViewModel) {
+fun UserSearchView(viewModel: ManageGroupMemberViewModel, onClose: () -> Unit) {
     val addUserToGroupCandidates by viewModel.addUserToGroupCandidates.observeAsState(emptyMap())
     val searchQuery = remember { mutableStateOf("") }
+    val filteredCandidates = addUserToGroupCandidates.filter { it.key.name.contains(searchQuery.value, ignoreCase = true) }.toList()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(16.dp)
-    ) {
-        TextField(
-            value = searchQuery.value,
-            onValueChange = { searchQuery.value = it },
-            label = { Text("Search Users") },
-            modifier = Modifier.fillMaxWidth()
-        )
+            .padding(16.dp),
 
-        Spacer(modifier = Modifier.height(16.dp))
+        content = {
+            SearchUserField(
+                value = searchQuery.value,
+                onValueChange = { searchQuery.value = it }
+            )
 
-        LazyColumn {
-            items(addUserToGroupCandidates.filter { it.key.name.contains(searchQuery.value, ignoreCase = true) }.toList()) { (user, isInGroup) ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            UserList(filteredCandidates = filteredCandidates, viewModel = viewModel)
+        }
+    )
+}
+
+@Composable
+fun SearchUserField(value: String, onValueChange: (String) -> Unit) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text("Search Users") },
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@Composable
+fun UserList(filteredCandidates: List<Pair<UserData, Boolean>>, viewModel: ManageGroupMemberViewModel) {
+    LazyColumn {
+        items(filteredCandidates) { (user, isInGroup) ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+
+                content = {
                     Text(user.name, modifier = Modifier.weight(1f))
                     if (!isInGroup) {
-                        Button(
-                            onClick = {
-                                viewModel.addUserToGroup(user.id)
-                                viewModel.setShowUserSearch(false)
-                            },
-                            content = {
-                                Text("Add")
-                            }
-                        )
+                        AddUserButton(viewModel = viewModel, user = user)
                     }
                 }
-            }
+            )
         }
     }
+}
+
+@Composable
+fun AddUserButton(viewModel: ManageGroupMemberViewModel, user: UserData) {
+    Button(
+        onClick = {
+            viewModel.addUserToGroup(user.id)
+        },
+        content = {
+            Text("Add")
+        }
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewUserSearchView() {
-    val dependencyInjectionContainer: DependencyInjectionContainer = DependencyInjectionContainer()
-    val groupViewModel: GroupViewModel = dependencyInjectionContainer.groupViewModel
-    UserSearchView(viewModel = groupViewModel)
+    val manageGroupMemberViewModel = ManageGroupMemberViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository)
+    UserSearchView(viewModel = manageGroupMemberViewModel, {})
 }

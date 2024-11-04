@@ -8,20 +8,17 @@ import dk.sdu.myshare.business.utility.DependencyInjectionContainer
 import dk.sdu.myshare.presentation.group.selectedgroup.view.GroupView
 
 @Composable
-fun HomeView(
-    modifier: Modifier = Modifier,
-    dependencyInjectionContainer: DependencyInjectionContainer
-) {
-    Column (
-        modifier = modifier
-    ) {
-        GroupView(dependencyInjectionContainer.groupViewModel)
-    }
+fun HomeView(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        content = {
+            GroupView(DependencyInjectionContainer.selectedGroupViewModel)
+        }
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewHomeView() {
-    val dependencyInjectionContainer: DependencyInjectionContainer = DependencyInjectionContainer()
-    HomeView(modifier = Modifier, dependencyInjectionContainer = dependencyInjectionContainer)
+    HomeView(modifier = Modifier)
 }
