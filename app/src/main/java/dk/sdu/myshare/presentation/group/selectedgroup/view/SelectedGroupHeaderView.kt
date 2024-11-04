@@ -16,6 +16,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,6 +50,8 @@ fun GroupHeader(viewModel: SelectedGroupViewModel) {
             Spacer(modifier = Modifier.height(20.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
                 content = {
                     BoxWithConstraints(
                         modifier = Modifier
@@ -76,7 +82,7 @@ fun GroupHeader(viewModel: SelectedGroupViewModel) {
 
                     Box(
                         modifier = Modifier
-                            .size(40.dp)
+                            .size(37.dp)
                             .clip(CircleShape)
                             .background(Color.hsv(0f, 0f, 0.4f),)
                             .clickable {
@@ -85,11 +91,12 @@ fun GroupHeader(viewModel: SelectedGroupViewModel) {
                         contentAlignment = Alignment.Center,
 
                         content = {
-                            Text(
-                                text = "+",
-//                                fontWeight = FontWeight.Bold,
-                                color = Color.White,
-                                style = MaterialTheme.typography.titleLarge
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Edit Icon",
+                                tint = Color.White,
+                                modifier = Modifier
+                                    .fillMaxWidth(0.55f)
                             )
                         }
                     )
@@ -138,12 +145,10 @@ fun GroupMembers(viewModel: SelectedGroupViewModel, modifier: Modifier = Modifie
                 GroupMemberIcon(
                     name = viewModel.getNameLetters(it.name),
                     color = viewModel.getTemporaryUserColor(it.id),
-                    {}
+                    {} // TODO: Open user profile
                 )
                 Spacer(modifier = Modifier.width(10.dp))
             }
-
-
         }
     )
 }

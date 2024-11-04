@@ -1,6 +1,7 @@
 package dk.sdu.myshare.presentation.group.managegroupmember.viewmodel
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,6 +10,7 @@ import dk.sdu.myshare.business.model.group.GroupData
 import dk.sdu.myshare.business.model.group.GroupRepository
 import dk.sdu.myshare.business.model.user.UserData
 import dk.sdu.myshare.business.model.user.UserRepository
+import dk.sdu.myshare.business.utility.ColorGenerator
 import dk.sdu.myshare.business.utility.DependencyInjectionContainer
 import dk.sdu.myshare.presentation.group.managegroupmember.view.UserSearchView
 
@@ -18,6 +20,8 @@ class ManageGroupMemberViewModel(private val userRepository: UserRepository, pri
 
     private val _groupData: MutableLiveData<GroupData> = MutableLiveData<GroupData>()
     val groupData: LiveData<GroupData> = _groupData
+
+    private val generatedUserColors: MutableMap<Int, Color> = mutableMapOf()
 
     init {
         refreshCurrentGroup()
@@ -34,6 +38,7 @@ class ManageGroupMemberViewModel(private val userRepository: UserRepository, pri
         groupDataResult?.let {
             _groupData.postValue(it)
         }
+        refreshAddUserToGroupCandidates() // FIXME: Only for preview not for production
     }
 
     fun refreshAddUserToGroupCandidates() {
@@ -58,6 +63,44 @@ class ManageGroupMemberViewModel(private val userRepository: UserRepository, pri
             return groupRepository.addUserToGroup(userID, groupID)
         }
         return false
+    }
+
+    fun removeUserFromGroup(userID: Int): Boolean {
+        groupData.value?.id?.let { groupID ->
+            refreshCurrentGroup()
+            return groupRepository.removeUserFromGroup(userID, groupID)
+        }
+        return false
+    }
+
+    fun getTemporaryUserColor(userID: Int): Color {
+        if (generatedUserColors.containsKey(userID)) {
+            return generatedUserColors[userID]!! // FIXME: Better way to handle this
+        }
+
+        var color: Color
+        do {
+            color = ColorGenerator.getRandomPastelColor()
+        } while (generatedUserColors.containsValue(color))
+
+        generatedUserColors[userID] = color
+        return color
+    }
+
+
+    /**
+     * If the input name consists of only one word, the first two letters of the word are returned.
+     *
+     * @param name The full name to extract the letters from.
+     * @return The first letter of a names first and last name.
+     */
+    fun getNameLetters(name: String): String {
+        val words = name.split(" ")
+        return if (words.size == 1) {
+            words[0].take(2).uppercase()
+        } else {
+            "${words[0][0]}${words[words.size - 1][0]}".uppercase()
+        }
     }
 }
 
