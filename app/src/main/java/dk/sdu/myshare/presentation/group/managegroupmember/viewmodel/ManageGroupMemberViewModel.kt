@@ -12,6 +12,7 @@ import dk.sdu.myshare.business.model.user.UserData
 import dk.sdu.myshare.business.model.user.UserRepository
 import dk.sdu.myshare.business.utility.ColorGenerator
 import dk.sdu.myshare.business.utility.DependencyInjectionContainer
+import dk.sdu.myshare.business.utility.ProfileFormatter
 import dk.sdu.myshare.presentation.group.managegroupmember.view.UserSearchView
 
 class ManageGroupMemberViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository) : ViewModel() {
@@ -87,20 +88,8 @@ class ManageGroupMemberViewModel(private val userRepository: UserRepository, pri
         return color
     }
 
-
-    /**
-     * If the input name consists of only one word, the first two letters of the word are returned.
-     *
-     * @param name The full name to extract the letters from.
-     * @return The first letter of a names first and last name.
-     */
-    fun getNameLetters(name: String): String {
-        val words = name.split(" ")
-        return if (words.size == 1) {
-            words[0].take(2).uppercase()
-        } else {
-            "${words[0][0]}${words[words.size - 1][0]}".uppercase()
-        }
+    fun getNameInitials(name: String): String {
+        return ProfileFormatter.getNameLetters(name)
     }
 }
 

@@ -98,7 +98,7 @@ fun UserList(filteredCandidates: List<Pair<UserData, Boolean>>, viewModel: Manag
 
                         content = {
                             GroupMemberIcon(
-                                name = viewModel.getNameLetters(user.name),
+                                name = viewModel.getNameInitials(user.name),
                                 color = viewModel.getTemporaryUserColor(user.id),
                                 {} // TODO: Open user profile
                             )

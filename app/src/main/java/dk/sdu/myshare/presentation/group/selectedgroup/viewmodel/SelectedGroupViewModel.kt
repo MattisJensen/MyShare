@@ -12,6 +12,7 @@ import dk.sdu.myshare.business.model.group.GroupRepository
 import dk.sdu.myshare.business.model.user.UserData
 import dk.sdu.myshare.business.model.user.UserRepository
 import dk.sdu.myshare.business.utility.ColorGenerator
+import dk.sdu.myshare.business.utility.ProfileFormatter
 import dk.sdu.myshare.presentation.group.selectedgroup.view.GroupView
 
 class SelectedGroupViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository) : ViewModel() {
@@ -85,7 +86,9 @@ class SelectedGroupViewModel(private val userRepository: UserRepository, private
         refreshCurrentGroupMembers()
     }
 
-
+    fun getNameInitials(name: String): String {
+        return ProfileFormatter.getNameLetters(name)
+    }
 }
 
 @Preview(showBackground = true)

@@ -143,7 +143,7 @@ fun GroupMembers(viewModel: SelectedGroupViewModel, modifier: Modifier = Modifie
         content = {
             userData.value?.forEach {
                 GroupMemberIcon(
-                    name = viewModel.getNameLetters(it.name),
+                    name = viewModel.getNameInitials(it.name),
                     color = viewModel.getTemporaryUserColor(it.id),
                     {} // TODO: Open user profile
                 )
