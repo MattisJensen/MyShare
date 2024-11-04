@@ -1,4 +1,6 @@
 package dk.sdu.myshare.presentation.home.viewmodel
 
-class HomeViewModel {
+import androidx.lifecycle.ViewModel
+
+class HomeViewModel : ViewModel() {
 }
