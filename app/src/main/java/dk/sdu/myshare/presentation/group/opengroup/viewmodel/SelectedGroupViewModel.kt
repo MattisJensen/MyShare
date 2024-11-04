@@ -1,4 +1,4 @@
-package dk.sdu.myshare.viewmodel
+package dk.sdu.myshare.presentation.group.opengroup.viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -6,12 +6,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import dk.sdu.myshare.di.DependencyInjectionContainer
-import dk.sdu.myshare.model.group.GroupData
-import dk.sdu.myshare.model.group.GroupRepository
-import dk.sdu.myshare.model.user.UserData
-import dk.sdu.myshare.model.user.UserRepository
-import dk.sdu.myshare.view.GroupView
+import dk.sdu.myshare.business.utility.DependencyInjectionContainer
+import dk.sdu.myshare.business.model.group.GroupData
+import dk.sdu.myshare.business.model.group.GroupRepository
+import dk.sdu.myshare.business.model.user.UserData
+import dk.sdu.myshare.business.model.user.UserRepository
+import dk.sdu.myshare.presentation.group.opengroup.view.GroupView
 import kotlin.math.pow
 import kotlin.random.Random
 
@@ -24,6 +24,9 @@ class GroupViewModel(private val userRepository: UserRepository, private val gro
 
     private val _addUserToGroupCandidates = MutableLiveData<Map<UserData, Boolean>>()
     val addUserToGroupCandidates: LiveData<Map<UserData, Boolean>> get() = _addUserToGroupCandidates
+
+    private val _showUserSearch = MutableLiveData(false)
+    val showUserSearch: LiveData<Boolean> get() = _showUserSearch
 
     private val generatedUserColors: MutableMap<Int, Color> = mutableMapOf()
 
@@ -99,6 +102,10 @@ class GroupViewModel(private val userRepository: UserRepository, private val gro
 
         generatedUserColors[userID] = color
         return color
+    }
+
+    fun setShowUserSearch(show: Boolean) {
+        _showUserSearch.value = show
     }
 
     /**

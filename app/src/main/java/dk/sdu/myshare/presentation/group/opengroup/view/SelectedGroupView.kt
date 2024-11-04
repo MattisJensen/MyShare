@@ -1,4 +1,4 @@
-package dk.sdu.myshare.view
+package dk.sdu.myshare.presentation.group.opengroup.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,25 +29,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dk.sdu.myshare.di.DependencyInjectionContainer
-import dk.sdu.myshare.viewmodel.GroupViewModel
+import dk.sdu.myshare.business.utility.DependencyInjectionContainer
+import dk.sdu.myshare.presentation.group.managegroupmember.view.UserSearchView
+import dk.sdu.myshare.presentation.group.opengroup.viewmodel.GroupViewModel
 
 @Composable
 fun GroupView(viewModel: GroupViewModel) {
-    val groupData = viewModel.groupData.observeAsState()
-    val userData = viewModel.userData.observeAsState()
+    if (viewModel.showUserSearch.observeAsState(false).value) {
+        UserSearchView(viewModel = viewModel)
+    } else {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.hsv(240f, 0.1f, 1f)),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally,
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.hsv(240f, 0.1f, 1f)),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally,
-
-        content = {
-            GroupHeader(viewModel = viewModel)
-        }
-    )
+            content = {
+                GroupHeader(viewModel = viewModel)
+            }
+        )
+    }
 }
 
 @Composable
@@ -93,10 +95,25 @@ fun GroupHeader(viewModel: GroupViewModel) {
                         }
                     )
 
-                    GroupMemberIcon(
-                        name = "+",
-                        color = Color.hsv(0f, 0f, 0.4f),
-                        onClick = { viewModel.addUserToGroup(1) }
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .background(Color.hsv(0f, 0f, 0.4f),)
+                            .clickable {
+                                viewModel.refreshAddUserToGroupCandidates()
+                                viewModel.setShowUserSearch(true)
+                            },
+                        contentAlignment = Alignment.Center,
+
+                        content = {
+                            Text(
+                                text = "+",
+//                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                        }
                     )
                 }
             )

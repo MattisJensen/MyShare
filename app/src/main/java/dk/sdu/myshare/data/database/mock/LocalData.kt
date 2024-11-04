@@ -1,4 +1,7 @@
-package dk.sdu.myshare.model.database.mock
+package dk.sdu.myshare.data.database.mock
+
+import dk.sdu.myshare.data.database.mock.tables.MockDBGroup
+import dk.sdu.myshare.data.database.mock.tables.MockDBUser
 
 /**
  * Using object in Kotlin creates a singleton, which ensures that there is only one instance of LocalData throughout the application.

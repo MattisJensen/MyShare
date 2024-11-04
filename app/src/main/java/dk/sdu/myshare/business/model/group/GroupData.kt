@@ -1,4 +1,4 @@
-package dk.sdu.myshare.model.group
+package dk.sdu.myshare.business.model.group
 
 data class GroupData(
     val id: Int,

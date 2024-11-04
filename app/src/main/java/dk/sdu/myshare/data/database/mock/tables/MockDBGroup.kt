@@ -1,4 +1,4 @@
-package dk.sdu.myshare.model.database.mock
+package dk.sdu.myshare.data.database.mock.tables
 
 data class MockDBGroup (
     val id: Int,

@@ -1,10 +1,11 @@
-package dk.sdu.myshare.view
+package dk.sdu.myshare.presentation.home.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import dk.sdu.myshare.di.DependencyInjectionContainer
+import dk.sdu.myshare.business.utility.DependencyInjectionContainer
+import dk.sdu.myshare.presentation.group.opengroup.view.GroupView
 
 @Composable
 fun HomeView(

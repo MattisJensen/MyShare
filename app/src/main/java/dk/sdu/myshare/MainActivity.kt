@@ -10,9 +10,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import dk.sdu.myshare.di.DependencyInjectionContainer
+import dk.sdu.myshare.business.utility.DependencyInjectionContainer
 import dk.sdu.myshare.ui.theme.MyShareTheme
-import dk.sdu.myshare.view.HomeView
+import dk.sdu.myshare.presentation.home.view.HomeView
 
 class MainActivity : ComponentActivity() {
     val dependencyInjectionContainer: DependencyInjectionContainer

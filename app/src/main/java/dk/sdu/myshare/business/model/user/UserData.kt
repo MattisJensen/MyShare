@@ -1,4 +1,4 @@
-package dk.sdu.myshare.model.user
+package dk.sdu.myshare.business.model.user
 
 data class UserData(
     val id: Int,

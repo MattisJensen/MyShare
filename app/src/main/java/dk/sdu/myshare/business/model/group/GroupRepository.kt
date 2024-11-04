@@ -1,6 +1,6 @@
-package dk.sdu.myshare.model.group
+package dk.sdu.myshare.business.model.group
 
-import dk.sdu.myshare.model.database.mock.LocalData
+import dk.sdu.myshare.data.database.mock.LocalData
 
 class GroupRepository {
     fun fetchGroupDataByID(id: Int): GroupData? {

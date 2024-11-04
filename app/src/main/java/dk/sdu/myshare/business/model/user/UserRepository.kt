@@ -1,7 +1,7 @@
-package dk.sdu.myshare.model.user
+package dk.sdu.myshare.business.model.user
 
-import dk.sdu.myshare.model.database.mock.LocalData
-import dk.sdu.myshare.model.database.mock.MockDBUser
+import dk.sdu.myshare.data.database.mock.LocalData
+import dk.sdu.myshare.data.database.mock.tables.MockDBUser
 
 class UserRepository {
     fun fetchUserDataByID(id: Int): UserData? {
