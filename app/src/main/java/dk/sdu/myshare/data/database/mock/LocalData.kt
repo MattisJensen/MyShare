@@ -53,6 +53,18 @@ object LocalData {
         return true
     }
 
+    fun removeUserFromGroup(userId: Int, groupId: Int): Boolean {
+        val group: MockDBGroup = getGroupById(groupId) ?: return false
+        val user: MockDBUser = getUserById(userId) ?: return false
+
+        if (!group.members.contains(userId)) {
+            return false // User not in group
+        }
+
+        group.members.remove(userId)
+        return true
+    }
+
 
     init {
         // add mock users
