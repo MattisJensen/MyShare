@@ -1,4 +1,4 @@
-package dk.sdu.myshare.presentation.profile.viewmodel
+package dk.sdu.myshare.presentation.profile.otherprofile.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,7 @@ import dk.sdu.myshare.business.model.group.GroupRepository
 import dk.sdu.myshare.business.model.user.UserData
 import dk.sdu.myshare.business.model.user.UserRepository
 
-class ProfileViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository, private val friendshipRepository: FriendshipRepository, private val profileUserId: Int) : ViewModel() {
+class OtherProfileViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository, private val friendshipRepository: FriendshipRepository, private val profileUserId: Int) : ViewModel() {
     private val _userProfile = MutableLiveData<UserData>()
     val userProfile: LiveData<UserData> = _userProfile
 

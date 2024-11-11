@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -34,19 +35,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import dk.sdu.myshare.business.model.user.UserData
-import dk.sdu.myshare.business.utility.DependencyInjectionContainer
 import dk.sdu.myshare.business.utility.ViewModelFactory
 import dk.sdu.myshare.presentation.group.managegroupmember.viewmodel.ManageGroupMemberViewModel
-import dk.sdu.myshare.presentation.group.selectedgroup.view.GroupMemberIcon
+import dk.sdu.myshare.presentation.group.opengroup.view.GroupMemberIcon
+
+@Composable
+fun ManageGroupMemberViewRoot(
+    navController: NavHostController,
+    viewModel: ManageGroupMemberViewModel
+) {
+    ManageGroupMemberView(viewModel = viewModel, {})
+}
 
 @Composable
 fun ManageGroupMemberView(viewModel: ManageGroupMemberViewModel, onClose: () -> Unit) {
-    viewModel.onViewLoad()
-
-    val addUserToGroupCandidates by viewModel.addUserToGroupCandidates.observeAsState(emptyMap())
+    val filteredMembers by viewModel.filteredMembers.observeAsState(emptyList())
+    val filteredCandidates by viewModel.filteredCandidates.observeAsState(emptyList())
     val searchQuery = remember { mutableStateOf("") }
-    val filteredCandidates = addUserToGroupCandidates.filter { it.key.name.contains(searchQuery.value, ignoreCase = true) }.toList()
 
     Column(
         modifier = Modifier
@@ -57,12 +64,15 @@ fun ManageGroupMemberView(viewModel: ManageGroupMemberViewModel, onClose: () -> 
         content = {
             SearchUserField(
                 value = searchQuery.value,
-                onValueChange = { searchQuery.value = it }
+                onValueChange = {
+                    searchQuery.value = it
+                    viewModel.filterUsers(it)
+                }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            UserList(filteredCandidates = filteredCandidates, viewModel = viewModel, onClose = onClose)
+            UserList(viewModel, filteredMembers, filteredCandidates, onClose)
         }
     )
 }
@@ -73,18 +83,20 @@ fun SearchUserField(value: String, onValueChange: (String) -> Unit) {
         value = value,
         onValueChange = onValueChange,
         label = { Text("Search Users") },
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true
     )
 }
 
 @Composable
-fun UserList(filteredCandidates: List<Pair<UserData, Boolean>>, viewModel: ManageGroupMemberViewModel, onClose: () -> Unit) {
+fun UserList(viewModel: ManageGroupMemberViewModel, members: List<UserData>, usersToAdd: List<UserData>, onClose: () -> Unit) {
     LazyColumn {
-        items(filteredCandidates) { (user, isInGroup) ->
+        items(members + usersToAdd) { user ->
             Column(
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .fillMaxWidth(),
+
                 content = {
                     Row(
                         modifier = Modifier
@@ -102,7 +114,7 @@ fun UserList(filteredCandidates: List<Pair<UserData, Boolean>>, viewModel: Manag
                             Spacer(modifier = Modifier.width(13.dp))
 
                             Text(user.name, modifier = Modifier.weight(1f))
-                            if (!isInGroup) {
+                            if (usersToAdd.contains(user)) {
                                 EditButton(
                                     onClick = {
                                         viewModel.addUserToGroup(user.id)
@@ -171,6 +183,6 @@ fun EditButton(onClick: () -> Unit, color: Color, icon: ImageVector) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewUserSearchView() {
-    val manageGroupMemberViewModel = ViewModelFactory.getManageGroupMemberViewModel(1)
+    val manageGroupMemberViewModel = ViewModelFactory.getManageGroupMembersViewModel(1)
     ManageGroupMemberView(viewModel = manageGroupMemberViewModel, {})
 }

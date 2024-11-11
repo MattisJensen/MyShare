@@ -1,4 +1,4 @@
-package dk.sdu.myshare.presentation.profile.view
+package dk.sdu.myshare.presentation.profile.otherprofile.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,14 +27,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import dk.sdu.myshare.R
-import dk.sdu.myshare.business.utility.DependencyInjectionContainer
 import dk.sdu.myshare.business.utility.ViewModelFactory
-import dk.sdu.myshare.presentation.profile.viewmodel.ProfileViewModel
-
+import dk.sdu.myshare.presentation.profile.otherprofile.viewmodel.OtherProfileViewModel
+@Composable
+fun OtherProfileViewRoot(
+    navController: NavHostController,
+    viewModel: OtherProfileViewModel
+) {
+    OtherProfileView(viewModel)
+}
 
 @Composable
-fun ProfileView(viewModel: ProfileViewModel) {
+fun OtherProfileView(viewModel: OtherProfileViewModel) {
     val userProfile = viewModel.userProfile.observeAsState()
 
     userProfile.value?.let { profile ->
@@ -91,5 +97,5 @@ fun ProfileView(viewModel: ProfileViewModel) {
 @Preview
 @Composable
 fun ProfileViewPreview() {
-    ProfileView(ViewModelFactory.getProfileViewModel(1))
+    OtherProfileView(ViewModelFactory.getOtherProfileViewModel(1))
 }

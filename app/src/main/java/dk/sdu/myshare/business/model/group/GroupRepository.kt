@@ -23,4 +23,15 @@ class GroupRepository {
     fun removeUserFromGroup(userID: Int, groupID: Int): Boolean {
         return LocalData.removeUserFromGroupById(userID, groupID)
     }
+
+    fun fetchGroupWhereUserIsMember(userID: Int): List<GroupData> {
+        return LocalData.getGroupsWhereUserIsMemberById(userID).map {
+            GroupData(
+                id = it.id,
+                name = it.name,
+                groupBalance = it.groupBalance,
+                members = it.members
+            )
+        }
+    }
 }

@@ -15,49 +15,93 @@ import dk.sdu.myshare.business.utility.ProfileFormatter
 import dk.sdu.myshare.business.utility.ViewModelFactory
 import dk.sdu.myshare.presentation.group.managegroupmember.view.ManageGroupMemberView
 
-class ManageGroupMemberViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository, private val selectedGroupId: Int) : ViewModel() {
-    private val _addUserToGroupCandidates = MutableLiveData<Map<UserData, Boolean>>()
-    val addUserToGroupCandidates: LiveData<Map<UserData, Boolean>> get() = _addUserToGroupCandidates
+class ManageGroupMemberViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository, private val openGroupId: Int) : ViewModel() {
+    private val _currentGroup: MutableLiveData<GroupData> = MutableLiveData<GroupData>()
+    val currentGroup: LiveData<GroupData> = _currentGroup
 
-    private val _groupData: MutableLiveData<GroupData> = MutableLiveData<GroupData>()
-    val groupData: LiveData<GroupData> = _groupData
+    private val _groupMembers: MutableLiveData<List<UserData>> = MutableLiveData<List<UserData>>()
+    val groupMembers: LiveData<List<UserData>> = _groupMembers
+
+    private val _addUserToGroupCandidates = MutableLiveData<List<UserData>>()
+    val addUserToGroupCandidates: LiveData<List<UserData>> get() = _addUserToGroupCandidates
+
+    private val _filteredMembers = MutableLiveData<List<UserData>>()
+    val filteredMembers: LiveData<List<UserData>> get() = _filteredMembers
+
+    private val _filteredCandidates = MutableLiveData<List<UserData>>()
+    val filteredCandidates: LiveData<List<UserData>> get() = _filteredCandidates
+
 
     private val generatedUserColors: MutableMap<Int, Color> = mutableMapOf()
 
     init {
+        observeGroupData()
         refreshCurrentGroup()
     }
 
-    fun onViewLoad() {
-        refreshCurrentGroup()
-        refreshAddUserToGroupCandidates()
+    private fun observeGroupData() {
+        currentGroup.observeForever {
+            refreshCurrentGroupMembers()
+            refreshAddUserToGroupCandidates()
+        }
     }
 
     fun refreshCurrentGroup() {
-        val groupDataResult: GroupData? = groupRepository.fetchGroupDataByID(selectedGroupId)
+        val groupDataResult: GroupData? = groupRepository.fetchGroupDataByID(openGroupId)
         groupDataResult?.let {
-            _groupData.postValue(it)
+            _currentGroup.postValue(it)
         }
     }
 
-    fun refreshAddUserToGroupCandidates() {
-        if (groupData.value == null) {
+    fun refreshCurrentGroupMembers() {
+        if (currentGroup.value == null) {
             return
         }
 
-        val addUserToGroupCandidates: MutableMap<UserData, Boolean> = mutableMapOf()
-        val allUsers: List<UserData> = userRepository.fetchAllUsers() ?: emptyList()
+        val currentMembers: MutableList<UserData> = mutableListOf()
 
-        // add each user to the map with a boolean value indicating if they are already in the group. True if they are, false if they are not.
-        allUsers.forEach { user ->
-            addUserToGroupCandidates[user] = groupData.value?.members?.contains(user.id) ?: false
+        currentGroup.value?.members?.forEach { memberID ->
+            val userDataResult: UserData? = userRepository.fetchUserByID(memberID)
+            userDataResult?.let {
+                currentMembers.add(it)
+            }
         }
 
+        currentMembers.sortBy { it.name }
+        _groupMembers.postValue(currentMembers)
+        _filteredMembers.postValue(currentMembers)
+
+    }
+
+    fun refreshAddUserToGroupCandidates() {
+        if (currentGroup.value == null) {
+            return
+        }
+
+        val addUserToGroupCandidates: MutableList<UserData> = mutableListOf()
+        val allUsers: List<UserData> = userRepository.fetchAllUsers() ?: emptyList()
+
+        allUsers.forEach { user ->
+            if (currentGroup.value?.members?.contains(user.id) == false) {
+                addUserToGroupCandidates.add(user)
+            }
+        }
+
+        addUserToGroupCandidates.sortBy { it.name }
         _addUserToGroupCandidates.postValue(addUserToGroupCandidates)
+        _filteredCandidates.postValue(addUserToGroupCandidates)
+    }
+
+    fun filterUsers(query: String) {
+        val filteredMembers = groupMembers.value?.filter { it.name.contains(query, ignoreCase = true) } ?: emptyList()
+        val filteredCandidates = addUserToGroupCandidates.value?.filter { it.name.contains(query, ignoreCase = true) } ?: emptyList()
+
+        _filteredMembers.postValue(filteredMembers)
+        _filteredCandidates.postValue(filteredCandidates)
     }
 
     fun addUserToGroup(userID: Int): Boolean {
-        groupData.value?.id?.let { groupID ->
+        currentGroup.value?.id?.let { groupID ->
             refreshCurrentGroup()
             return groupRepository.addUserToGroup(userID, groupID)
         }
@@ -65,7 +109,7 @@ class ManageGroupMemberViewModel(private val userRepository: UserRepository, pri
     }
 
     fun removeUserFromGroup(userID: Int): Boolean {
-        groupData.value?.id?.let { groupID ->
+        currentGroup.value?.id?.let { groupID ->
             refreshCurrentGroup()
             return groupRepository.removeUserFromGroup(userID, groupID)
         }
@@ -94,6 +138,6 @@ class ManageGroupMemberViewModel(private val userRepository: UserRepository, pri
 @Preview(showBackground = true)
 @Composable
 fun PreviewUserSearchView() {
-    val manageGroupMemberViewModel = ViewModelFactory.getManageGroupMemberViewModel(1)
+    val manageGroupMemberViewModel = ViewModelFactory.getManageGroupMembersViewModel(1)
     ManageGroupMemberView(viewModel = manageGroupMemberViewModel, {})
 }

@@ -1,4 +1,4 @@
-package dk.sdu.myshare.presentation.group.selectedgroup.view
+package dk.sdu.myshare.presentation.group.opengroup.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,7 +18,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,12 +31,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dk.sdu.myshare.business.utility.DependencyInjectionContainer
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import dk.sdu.myshare.business.utility.ViewModelFactory
-import dk.sdu.myshare.presentation.group.selectedgroup.viewmodel.SelectedGroupViewModel
+import dk.sdu.myshare.presentation.Views
+import dk.sdu.myshare.presentation.group.opengroup.viewmodel.OpenGroupViewModel
 
 @Composable
-fun GroupHeader(viewModel: SelectedGroupViewModel) {
+fun OpenGroupHeader(navController: NavHostController, viewModel: OpenGroupViewModel) {
     Column(
         modifier = Modifier
             .background(color = Color.hsv(0f, 0f, 1f))
@@ -49,67 +50,14 @@ fun GroupHeader(viewModel: SelectedGroupViewModel) {
         content = {
             GroupInformation(viewModel = viewModel)
             Spacer(modifier = Modifier.height(20.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-                content = {
-                    BoxWithConstraints(
-                        modifier = Modifier
-                            .weight(1f),
-                        content = {
-                            val width = constraints.maxWidth.toFloat()
-                            val startX = width - 150f
-                            val endX = width
-
-                            GroupMembers(viewModel = viewModel)
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(40.dp)
-                                    .background(
-                                        brush = Brush.horizontalGradient(
-                                            colors = listOf(
-                                                Color.Transparent,
-                                                Color.White
-                                            ),
-                                            startX = startX,
-                                            endX = endX
-                                        )
-                                    )
-                            )
-                        }
-                    )
-
-                    Box(
-                        modifier = Modifier
-                            .size(37.dp)
-                            .clip(CircleShape)
-                            .background(Color.hsv(0f, 0f, 0.4f),)
-                            .clickable {
-                                viewModel.setShowUserSearch(true)
-                            },
-                        contentAlignment = Alignment.Center,
-
-                        content = {
-                            Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = "Edit Icon",
-                                tint = Color.White,
-                                modifier = Modifier
-                                    .fillMaxWidth(0.55f)
-                            )
-                        }
-                    )
-                }
-            )
+            GroupMemberBar(navController, viewModel)
         }
     )
 }
 
 @Composable
-fun GroupInformation(viewModel: SelectedGroupViewModel) {
-    val groupData = viewModel.groupData.observeAsState()
+fun GroupInformation(viewModel: OpenGroupViewModel) {
+    val groupData = viewModel.currentGroup.observeAsState()
 
     Row(
         modifier = Modifier
@@ -134,8 +82,68 @@ fun GroupInfoText(text: String) {
 }
 
 @Composable
-fun GroupMembers(viewModel: SelectedGroupViewModel, modifier: Modifier = Modifier) {
-    val userData = viewModel.userData.observeAsState()
+fun GroupMemberBar(navController: NavHostController, viewModel: OpenGroupViewModel) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        content = {
+            // Group Members
+            BoxWithConstraints(
+                modifier = Modifier
+                    .weight(1f),
+                content = {
+                    val width = constraints.maxWidth.toFloat()
+                    val startX = width - 150f
+                    val endX = width
+
+                    GroupMemberIconList(viewModel = viewModel)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(40.dp)
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = listOf(
+                                        Color.Transparent,
+                                        Color.White
+                                    ),
+                                    startX = startX,
+                                    endX = endX
+                                )
+                            )
+                    )
+                }
+            )
+
+            // Edit Group
+            Box(
+                modifier = Modifier
+                    .size(37.dp)
+                    .clip(CircleShape)
+                    .background(Color.hsv(0f, 0f, 0.4f))
+                    .clickable {
+                        navController.navigate(Views.ManageGroupMembers.createRoute(viewModel.getCurrentGroupId()))
+                    },
+                contentAlignment = Alignment.Center,
+
+                content = {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Edit Icon",
+                        tint = Color.White,
+                        modifier = Modifier
+                            .fillMaxWidth(0.55f)
+                    )
+                }
+            )
+        }
+    )
+}
+
+@Composable
+fun GroupMemberIconList(viewModel: OpenGroupViewModel, modifier: Modifier = Modifier) {
+    val userData = viewModel.currentUsers.observeAsState()
 
     Row(
         modifier = modifier
@@ -177,6 +185,7 @@ fun GroupMemberIcon(name: String, color: Color, onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewGroupHeader() {
-    val selectedGroupViewModel: SelectedGroupViewModel = ViewModelFactory.getSelectedGroupViewModel()
-    GroupHeader(viewModel = selectedGroupViewModel)
+    val openGroupViewModel: OpenGroupViewModel = ViewModelFactory.getOpenGroupViewModel(1)
+    val navController = rememberNavController()
+    OpenGroupHeader(navController, openGroupViewModel)
 }

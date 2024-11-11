@@ -70,6 +70,11 @@ object LocalData {
         return true
     }
 
+    fun getGroupsWhereUserIsMemberById(userId: Int): List<MockDBGroup> {
+        val user: MockDBUser = getUserById(userId) ?: return emptyList()
+        return groups.filter { it.members.contains(userId) }
+    }
+
     /* Friendship functions */
     fun getFriendshipsForUserById(userId: Int): List<MockDBFriendship> {
         getUserById(userId)?.let {
