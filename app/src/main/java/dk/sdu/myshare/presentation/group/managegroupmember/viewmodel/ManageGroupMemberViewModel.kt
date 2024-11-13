@@ -1,8 +1,6 @@
 package dk.sdu.myshare.presentation.group.managegroupmember.viewmodel
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,8 +10,6 @@ import dk.sdu.myshare.business.model.user.UserData
 import dk.sdu.myshare.business.model.user.UserRepository
 import dk.sdu.myshare.business.utility.ColorGenerator
 import dk.sdu.myshare.business.utility.ProfileFormatter
-import dk.sdu.myshare.business.utility.ViewModelFactory
-import dk.sdu.myshare.presentation.group.managegroupmember.view.ManageGroupMemberView
 
 class ManageGroupMemberViewModel(
     private val userRepository: UserRepository,
@@ -65,7 +61,7 @@ class ManageGroupMemberViewModel(
         val currentMembers: MutableList<UserData> = mutableListOf()
 
         currentGroup.value?.members?.forEach { memberID ->
-            val userDataResult: UserData? = userRepository.fetchUserByID(memberID)
+            val userDataResult: UserData? = userRepository.fetchUserById(memberID)
             userDataResult?.let {
                 currentMembers.add(it)
             }
@@ -104,25 +100,25 @@ class ManageGroupMemberViewModel(
         _filteredCandidates.postValue(filteredCandidates)
     }
 
-    fun addUserToGroup(userID: Int): Boolean {
+    fun addUserToGroup(userId: Int): Boolean {
         currentGroup.value?.id?.let { groupID ->
             refreshCurrentGroup()
-            return groupRepository.addUserToGroup(userID, groupID)
+            return groupRepository.addUserToGroup(userId, groupID)
         }
         return false
     }
 
-    fun removeUserFromGroup(userID: Int): Boolean {
+    fun removeUserFromGroup(userId: Int): Boolean {
         currentGroup.value?.id?.let { groupID ->
             refreshCurrentGroup()
-            return groupRepository.removeUserFromGroup(userID, groupID)
+            return groupRepository.removeUserFromGroup(userId, groupID)
         }
         return false
     }
 
-    fun getTemporaryUserColor(userID: Int): Color {
-        if (generatedUserColors.containsKey(userID)) {
-            return generatedUserColors[userID]!! // FIXME: Better way to handle this
+    fun getTemporaryUserColor(userId: Int): Color {
+        if (generatedUserColors.containsKey(userId)) {
+            return generatedUserColors[userId]!! // FIXME: Better way to handle this
         }
 
         var color: Color
@@ -130,7 +126,7 @@ class ManageGroupMemberViewModel(
             color = ColorGenerator.getRandomPastelColor()
         } while (generatedUserColors.containsValue(color))
 
-        generatedUserColors[userID] = color
+        generatedUserColors[userId] = color
         return color
     }
 

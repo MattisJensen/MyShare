@@ -140,7 +140,7 @@ object LocalData {
         }
 
         // add mock groups with fun names and 2 to 7 members
-        val groupNames = listOf("Unicorn Brewery", "Dragon Riders", "Phoenix Club", "Mystic Wizards", "Galactic Explorers", "Girls Trip 💁🏻‍♀️", "Adventure Squad", "Book Club", "Fitness Friends", "Travel Buddies")
+        val groupNames = listOf("Girls Tour️", "Fitness Group 💪", "TV Weekend", "Book Club 📚", "Travel Buddies ✈️", "Study Group 📖", "Work Friends", "Family Stuff", "Cinema Tour", "Football Team ⚽")
         for (i in 1..10) {
             val memberCount = (2..16).random()
             val members = (1..40).shuffled().take(memberCount).toMutableList()

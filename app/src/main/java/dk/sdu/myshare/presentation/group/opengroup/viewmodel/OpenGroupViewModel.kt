@@ -55,7 +55,7 @@ class OpenGroupViewModel(
         val currentUsers: MutableList<UserData> = mutableListOf()
 
         currentGroup.value?.members?.forEach { memberID ->
-            val userDataResult: UserData? = userRepository.fetchUserByID(memberID)
+            val userDataResult: UserData? = userRepository.fetchUserById(memberID)
             userDataResult?.let {
                 currentUsers.add(it)
             }

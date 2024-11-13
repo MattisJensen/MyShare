@@ -33,6 +33,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dk.sdu.myshare.R
 import dk.sdu.myshare.business.utility.ViewModelFactory
+import dk.sdu.myshare.presentation.Views
 import dk.sdu.myshare.presentation.profile.otherprofile.viewmodel.OtherProfileViewModel
 
 @Composable
@@ -40,11 +41,14 @@ fun OtherProfileViewRoot(
     navController: NavHostController,
     viewModel: OtherProfileViewModel
 ) {
-    OtherProfileView(viewModel)
+    OtherProfileView(navController, viewModel)
 }
 
 @Composable
-fun OtherProfileView(viewModel: OtherProfileViewModel) {
+fun OtherProfileView(
+    navController: NavHostController,
+    viewModel: OtherProfileViewModel
+) {
     val userProfile = viewModel.otherUser.observeAsState()
     val isFriend = viewModel.isFriend.observeAsState()
 
@@ -96,6 +100,15 @@ fun OtherProfileView(viewModel: OtherProfileViewModel) {
                         ) {
                             Text(text = "Add Friend")
                         }
+                    }
+                }
+
+                Button(onClick = { navController.navigate(Views.AddUserToGroup.createRoute(viewModel.getCurrentUserId(), viewModel.getOtherUserId())) }) {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = "Add to Group")
                     }
                 }
             }

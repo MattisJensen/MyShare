@@ -19,4 +19,10 @@ sealed class Views(val route: String) {
         val key: String = "groupId"
         fun createRoute(groupId: Int) = "managegroupmembers/$groupId"
     }
+
+    object AddUserToGroup : Views("addusertogroup/{currentUserId}/{otherUserId}") {
+        val key1: String = "currentUserId"
+        val key2: String = "otherUserId"
+        fun createRoute(currentUserId: Int, otherUserId: Int) = "addusertogroup/$currentUserId/$otherUserId"
+    }
 }

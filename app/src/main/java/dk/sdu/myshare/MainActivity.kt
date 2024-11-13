@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dk.sdu.myshare.business.utility.ViewModelFactory
 import dk.sdu.myshare.presentation.Views
+import dk.sdu.myshare.presentation.group.addtogroup.view.AddUserToGroupViewRoot
 import dk.sdu.myshare.presentation.group.managegroupmember.view.ManageGroupMemberViewRoot
 import dk.sdu.myshare.presentation.group.opengroup.view.OpenGroupViewRoot
 import dk.sdu.myshare.ui.theme.MyShareTheme
@@ -66,6 +67,12 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modif
         composable(Views.ManageGroupMembers.route) { backStackEntry ->
             val groupId = backStackEntry.arguments?.getString(Views.ManageGroupMembers.key)?.toInt() ?: 0
             ManageGroupMemberViewRoot(navController, ViewModelFactory.getManageGroupMembersViewModel(groupId))
+        }
+
+        composable(Views.AddUserToGroup.route) { backStackEntry ->
+            val currentUserId = backStackEntry.arguments?.getString(Views.AddUserToGroup.key1)?.toInt() ?: 0
+            val otherUserId = backStackEntry.arguments?.getString(Views.AddUserToGroup.key2)?.toInt() ?: 0
+            AddUserToGroupViewRoot(navController, ViewModelFactory.getAddUserToGroupViewModel(currentUserId, otherUserId))
         }
     }
 }

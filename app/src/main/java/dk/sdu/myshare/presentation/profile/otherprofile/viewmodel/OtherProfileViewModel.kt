@@ -33,7 +33,7 @@ class OtherProfileViewModel(
     }
 
     fun refreshUserProfile() {
-        val userProfile = userRepository.fetchUserByID(otherUserId)
+        val userProfile = userRepository.fetchUserById(otherUserId)
         userProfile?.let {
             _otherUser.postValue(it)
         }
@@ -53,8 +53,11 @@ class OtherProfileViewModel(
         refreshIsFriend()
     }
 
-    // get groups of current user
-//    fun getGroups(): List<String> {
-//        return userRepository.fetchUserByID(profileUserId)?.groups ?: emptyList()
-//    }
+    fun getCurrentUserId(): Int {
+        return currentUserId
+    }
+
+    fun getOtherUserId(): Int {
+        return otherUserId
+    }
 }

@@ -6,7 +6,11 @@ import dk.sdu.myshare.business.model.group.GroupData
 import dk.sdu.myshare.business.model.group.GroupRepository
 import dk.sdu.myshare.business.model.user.UserRepository
 
-class MyGroupsViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository, private val currentUser: Int) {
+class MyGroupsViewModel(
+    private val userRepository: UserRepository,
+    private val groupRepository: GroupRepository,
+    private val currentUserId: Int
+) {
     private val _myGroups: MutableLiveData<List<GroupData>> = MutableLiveData<List<GroupData>>()
     val myGroups: LiveData<List<GroupData>> = _myGroups
 
@@ -15,7 +19,8 @@ class MyGroupsViewModel(private val userRepository: UserRepository, private val 
     }
 
     fun refreshCurrentGroups() {
-        val groupDataResult: List<GroupData> = groupRepository.fetchGroupWhereUserIsMember(currentUser)
-        _myGroups.postValue(groupDataResult)
+        val myGroupsResult: List<GroupData> = groupRepository.fetchGroupWhereUserIsMember(currentUserId)
+        val sortedGroups = myGroupsResult.sortedBy { it.name }
+        _myGroups.postValue(sortedGroups)
     }
 }
