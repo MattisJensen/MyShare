@@ -4,9 +4,10 @@ sealed class Views(val route: String) {
     object LoginInput : Views("login")
     object Home : Views("home")
     object MyProfile : Views("myprofile")
-    object OtherProfile : Views("otherprofile") {
-        val key: String = "userId"
-        fun createRoute(userId: Int) = "otherprofile/$userId"
+    object OtherProfile : Views("otherprofile/{currentUserId}/{otherUserId}") {
+        val key1: String = "currentUserId"
+        val key2: String = "otherUserId"
+        fun createRoute(currentUserId: Int, otherUserId: Int) = "otherprofile/$currentUserId/$otherUserId"
     }
 
     object OpenGroup : Views("opengroup/{groupId}") {

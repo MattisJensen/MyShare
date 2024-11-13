@@ -8,34 +8,49 @@ import dk.sdu.myshare.business.model.group.GroupRepository
 import dk.sdu.myshare.business.model.user.UserData
 import dk.sdu.myshare.business.model.user.UserRepository
 
-class OtherProfileViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository, private val friendshipRepository: FriendshipRepository, private val profileUserId: Int) : ViewModel() {
-    private val _userProfile = MutableLiveData<UserData>()
-    val userProfile: LiveData<UserData> = _userProfile
+class OtherProfileViewModel(
+    private val userRepository: UserRepository,
+    private val groupRepository: GroupRepository,
+    private val friendshipRepository: FriendshipRepository,
+    private val currentUserId: Int,
+    private val otherUserId: Int
+) : ViewModel() {
+    private val _otherUser = MutableLiveData<UserData>()
+    val otherUser: LiveData<UserData> = _otherUser
 
     private val _isFriend = MutableLiveData(false)
     val isFriend: LiveData<Boolean> = _isFriend
 
     init {
-        refreshUserProfile() // FIXME: Hardcoded user ID instead of using the current logged in user
-        refreshIsFriend()
+        observeOtherUser()
+        refreshUserProfile()
     }
 
-    fun refreshUserProfile() {
-        val userProfile = userRepository.fetchUserByID(profileUserId)
-        userProfile?.let {
-            _userProfile.postValue(it)
+    fun observeOtherUser() {
+        _otherUser.observeForever {
             refreshIsFriend()
         }
     }
 
+    fun refreshUserProfile() {
+        val userProfile = userRepository.fetchUserByID(otherUserId)
+        userProfile?.let {
+            _otherUser.postValue(it)
+        }
+    }
+
     fun refreshIsFriend() {
-        val currentUserId = 1 // FIXME: Hardcoded user ID instead of using the current logged in user
-        _isFriend.postValue(friendshipRepository.isFriend(currentUserId, profileUserId))
+        _isFriend.postValue(friendshipRepository.isFriendById(currentUserId, otherUserId))
     }
 
     fun addFriend() {
-        val currentUserId = 1 // FIXME: Hardcoded user ID instead of using the current logged in user
-        friendshipRepository.addFriendship(currentUserId, profileUserId)
+        friendshipRepository.addFriendshipById(currentUserId, otherUserId)
+        refreshIsFriend()
+    }
+
+    fun removeFriend() {
+        friendshipRepository.removeFriendshipById(currentUserId, otherUserId)
+        refreshIsFriend()
     }
 
     // get groups of current user

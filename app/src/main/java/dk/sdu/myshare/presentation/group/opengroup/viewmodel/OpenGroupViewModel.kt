@@ -16,7 +16,11 @@ import dk.sdu.myshare.business.utility.ProfileFormatter
 import dk.sdu.myshare.business.utility.ViewModelFactory
 import dk.sdu.myshare.presentation.group.opengroup.view.OpenGroupView
 
-class OpenGroupViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository, private val openGroupId: Int) : ViewModel() {
+class OpenGroupViewModel(
+    private val userRepository: UserRepository,
+    private val groupRepository: GroupRepository,
+    private val openGroupId: Int
+) : ViewModel() {
     private val _currentGroupMembers: MutableLiveData<List<UserData>> = MutableLiveData<List<UserData>>(emptyList())
     val currentUsers: LiveData<List<UserData>> = _currentGroupMembers
 
@@ -81,6 +85,10 @@ class OpenGroupViewModel(private val userRepository: UserRepository, private val
 
     fun getCurrentGroupId(): Int {
         return openGroupId
+    }
+
+    fun getCurrentUserId(): Int {
+        return 1 // FIXME: Hardcoded for now
     }
 }
 

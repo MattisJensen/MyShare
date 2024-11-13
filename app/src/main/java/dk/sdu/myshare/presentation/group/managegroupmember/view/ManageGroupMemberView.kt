@@ -36,8 +36,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import dk.sdu.myshare.business.model.user.UserData
 import dk.sdu.myshare.business.utility.ViewModelFactory
+import dk.sdu.myshare.presentation.Views
 import dk.sdu.myshare.presentation.group.managegroupmember.viewmodel.ManageGroupMemberViewModel
 import dk.sdu.myshare.presentation.group.opengroup.view.GroupMemberIcon
 
@@ -46,11 +48,14 @@ fun ManageGroupMemberViewRoot(
     navController: NavHostController,
     viewModel: ManageGroupMemberViewModel
 ) {
-    ManageGroupMemberView(viewModel = viewModel, {})
+    ManageGroupMemberView(navController, viewModel)
 }
 
 @Composable
-fun ManageGroupMemberView(viewModel: ManageGroupMemberViewModel, onClose: () -> Unit) {
+fun ManageGroupMemberView(
+    navController: NavHostController,
+    viewModel: ManageGroupMemberViewModel
+) {
     val filteredMembers by viewModel.filteredMembers.observeAsState(emptyList())
     val filteredCandidates by viewModel.filteredCandidates.observeAsState(emptyList())
     val searchQuery = remember { mutableStateOf("") }
@@ -72,7 +77,11 @@ fun ManageGroupMemberView(viewModel: ManageGroupMemberViewModel, onClose: () -> 
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            UserList(viewModel, filteredMembers, filteredCandidates, onClose)
+            UserList(
+                navController,
+                viewModel,
+                filteredMembers,
+                filteredCandidates)
         }
     )
 }
@@ -89,13 +98,19 @@ fun SearchUserField(value: String, onValueChange: (String) -> Unit) {
 }
 
 @Composable
-fun UserList(viewModel: ManageGroupMemberViewModel, members: List<UserData>, usersToAdd: List<UserData>, onClose: () -> Unit) {
+fun UserList(
+    navController: NavHostController,
+    viewModel: ManageGroupMemberViewModel,
+    members: List<UserData>,
+    usersToAdd: List<UserData>,
+) {
     LazyColumn {
         items(members + usersToAdd) { user ->
             Column(
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .clickable { navController.navigate(Views.OtherProfile.createRoute(viewModel.getCurrentUserId(), user.id))  },
 
                 content = {
                     Row(
@@ -108,7 +123,7 @@ fun UserList(viewModel: ManageGroupMemberViewModel, members: List<UserData>, use
                             GroupMemberIcon(
                                 name = viewModel.getNameInitials(user.name),
                                 color = viewModel.getTemporaryUserColor(user.id),
-                                {} // TODO: Open user profile
+                                { navController.navigate(Views.OtherProfile.createRoute(viewModel.getCurrentUserId(), user.id)) }
                             )
 
                             Spacer(modifier = Modifier.width(13.dp))
@@ -118,7 +133,6 @@ fun UserList(viewModel: ManageGroupMemberViewModel, members: List<UserData>, use
                                 EditButton(
                                     onClick = {
                                         viewModel.addUserToGroup(user.id)
-                                        onClose()
                                     },
                                     color = Color(0xFF77DD77),
                                     icon = Icons.Default.Add
@@ -127,7 +141,6 @@ fun UserList(viewModel: ManageGroupMemberViewModel, members: List<UserData>, use
                                 EditButton(
                                     onClick = {
                                         viewModel.removeUserFromGroup(user.id)
-                                        onClose()
                                     },
                                     color = Color(0xFFFF6961),
                                     icon = Icons.Default.Delete
@@ -184,5 +197,6 @@ fun EditButton(onClick: () -> Unit, color: Color, icon: ImageVector) {
 @Composable
 fun PreviewUserSearchView() {
     val manageGroupMemberViewModel = ViewModelFactory.getManageGroupMembersViewModel(1)
-    ManageGroupMemberView(viewModel = manageGroupMemberViewModel, {})
+    val navController = rememberNavController()
+    ManageGroupMemberViewRoot(navController, manageGroupMemberViewModel)
 }

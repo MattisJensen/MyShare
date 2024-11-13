@@ -97,7 +97,7 @@ fun GroupMemberBar(navController: NavHostController, viewModel: OpenGroupViewMod
                     val startX = width - 150f
                     val endX = width
 
-                    GroupMemberIconList(viewModel = viewModel)
+                    GroupMemberIconList(navController, viewModel)
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -142,7 +142,11 @@ fun GroupMemberBar(navController: NavHostController, viewModel: OpenGroupViewMod
 }
 
 @Composable
-fun GroupMemberIconList(viewModel: OpenGroupViewModel, modifier: Modifier = Modifier) {
+fun GroupMemberIconList(
+    navController: NavHostController,
+    viewModel: OpenGroupViewModel,
+    modifier: Modifier = Modifier
+) {
     val userData = viewModel.currentUsers.observeAsState()
 
     Row(
@@ -154,7 +158,7 @@ fun GroupMemberIconList(viewModel: OpenGroupViewModel, modifier: Modifier = Modi
                 GroupMemberIcon(
                     name = viewModel.getNameInitials(it.name),
                     color = viewModel.getTemporaryUserColor(it.id),
-                    {} // TODO: Open user profile
+                    { navController.navigate(Views.OtherProfile.createRoute(viewModel.getCurrentUserId(), it.id)) }
                 )
                 Spacer(modifier = Modifier.width(10.dp))
             }

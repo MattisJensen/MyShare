@@ -103,6 +103,23 @@ object LocalData {
         return true
     }
 
+    fun deleteFriendshipById(user1Id: Int, user2Id: Int): Boolean {
+        if (user1Id == user2Id) {
+            return false
+        }
+
+        // check if users exist
+        val user1: MockDBUser = getUserById(user1Id) ?: return false
+        val user2: MockDBUser = getUserById(user2Id) ?: return false
+
+        if (!isFriendById(user1Id, user2Id)) {
+            return false
+        }
+
+        friendships.removeIf { (it.userId1 == user1Id && it.userId2 == user2Id) || (it.userId1 == user2Id && it.userId2 == user1Id) }
+        return true
+    }
+
 
     init {
         // add mock users

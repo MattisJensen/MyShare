@@ -23,7 +23,7 @@ object ViewModelFactory {
         return ManageGroupMemberViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository, groupId)
     }
 
-    fun getOtherProfileViewModel(profileUserId: Int): OtherProfileViewModel {
-        return OtherProfileViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository, DependencyInjectionContainer.friendshipRepository, profileUserId)
+    fun getOtherProfileViewModel(currentUserId: Int, otherUserId: Int): OtherProfileViewModel {
+        return OtherProfileViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository, DependencyInjectionContainer.friendshipRepository, currentUserId, otherUserId)
     }
 }

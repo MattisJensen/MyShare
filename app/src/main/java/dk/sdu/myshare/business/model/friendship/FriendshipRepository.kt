@@ -16,11 +16,15 @@ class FriendshipRepository {
         return emptyList()
     }
 
-    fun addFriendship(userId1: Int, userId2: Int): Boolean {
+    fun addFriendshipById(userId1: Int, userId2: Int): Boolean {
         return LocalData.addFriendshipById(userId1, userId2)
     }
 
-    fun isFriend(userId1: Int, userId2: Int): Boolean {
+    fun removeFriendshipById(userId1: Int, userId2: Int): Boolean {
+        return LocalData.deleteFriendshipById(userId1, userId2)
+    }
+
+    fun isFriendById(userId1: Int, userId2: Int): Boolean {
         return LocalData.isFriendById(userId1, userId2)
     }
 }

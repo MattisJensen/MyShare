@@ -53,8 +53,9 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modif
         }
 
         composable(Views.OtherProfile.route ) { backStackEntry ->
-            val groupId = backStackEntry.arguments?.getString(Views.OtherProfile.key)?.toInt() ?: 0
-            OtherProfileViewRoot(navController, ViewModelFactory.getOtherProfileViewModel(groupId))
+            val currentUserId = backStackEntry.arguments?.getString(Views.OtherProfile.key1)?.toInt() ?: 0
+            val otherUserId = backStackEntry.arguments?.getString(Views.OtherProfile.key2)?.toInt() ?: 0
+            OtherProfileViewRoot(navController, ViewModelFactory.getOtherProfileViewModel(currentUserId, otherUserId))
         }
 
         composable(Views.OpenGroup.route) { backStackEntry ->

@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,9 +30,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import dk.sdu.myshare.R
 import dk.sdu.myshare.business.utility.ViewModelFactory
 import dk.sdu.myshare.presentation.profile.otherprofile.viewmodel.OtherProfileViewModel
+
 @Composable
 fun OtherProfileViewRoot(
     navController: NavHostController,
@@ -41,7 +45,8 @@ fun OtherProfileViewRoot(
 
 @Composable
 fun OtherProfileView(viewModel: OtherProfileViewModel) {
-    val userProfile = viewModel.userProfile.observeAsState()
+    val userProfile = viewModel.otherUser.observeAsState()
+    val isFriend = viewModel.isFriend.observeAsState()
 
     userProfile.value?.let { profile ->
         Column(
@@ -74,20 +79,24 @@ fun OtherProfileView(viewModel: OtherProfileViewModel) {
                 Text(text = profile.email)
                 Spacer(modifier = Modifier.height(16.dp))
 
-//                if (viewModel.isFriend.value == true) {
-                Button(onClick = { viewModel.addFriend() }) {
-                    Row (
-                        horizontalArrangement =
-                            Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = "Add Friend")
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Add Friend",
-                            modifier = Modifier.size(16.dp)
-                        )
+                if (isFriend.value == true) {
+                    Button(onClick = { viewModel.removeFriend() }) {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(text = "Remove Friend")
+                        }
                     }
-//                    }
+                } else {
+                    Button(onClick = { viewModel.addFriend() }) {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(text = "Add Friend")
+                        }
+                    }
                 }
             }
         )
@@ -97,5 +106,6 @@ fun OtherProfileView(viewModel: OtherProfileViewModel) {
 @Preview
 @Composable
 fun ProfileViewPreview() {
-    OtherProfileView(ViewModelFactory.getOtherProfileViewModel(1))
+    val navController = rememberNavController()
+    OtherProfileViewRoot(navController, ViewModelFactory.getOtherProfileViewModel(1, 2))
 }

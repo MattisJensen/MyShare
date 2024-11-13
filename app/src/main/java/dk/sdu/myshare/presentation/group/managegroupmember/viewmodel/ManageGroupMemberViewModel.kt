@@ -15,7 +15,11 @@ import dk.sdu.myshare.business.utility.ProfileFormatter
 import dk.sdu.myshare.business.utility.ViewModelFactory
 import dk.sdu.myshare.presentation.group.managegroupmember.view.ManageGroupMemberView
 
-class ManageGroupMemberViewModel(private val userRepository: UserRepository, private val groupRepository: GroupRepository, private val openGroupId: Int) : ViewModel() {
+class ManageGroupMemberViewModel(
+    private val userRepository: UserRepository,
+    private val groupRepository: GroupRepository,
+    private val openGroupId: Int
+) : ViewModel() {
     private val _currentGroup: MutableLiveData<GroupData> = MutableLiveData<GroupData>()
     val currentGroup: LiveData<GroupData> = _currentGroup
 
@@ -133,11 +137,8 @@ class ManageGroupMemberViewModel(private val userRepository: UserRepository, pri
     fun getNameInitials(name: String): String {
         return ProfileFormatter.getNameLetters(name)
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewUserSearchView() {
-    val manageGroupMemberViewModel = ViewModelFactory.getManageGroupMembersViewModel(1)
-    ManageGroupMemberView(viewModel = manageGroupMemberViewModel, {})
+    fun getCurrentUserId(): Int {
+        return 1 //FIXME: Hardcoded user id
+    }
 }
