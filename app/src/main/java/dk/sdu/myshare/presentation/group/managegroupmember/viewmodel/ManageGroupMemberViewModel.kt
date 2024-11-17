@@ -31,7 +31,6 @@ class ManageGroupMemberViewModel(
     private val _filteredCandidates = MutableLiveData<List<UserData>>()
     val filteredCandidates: LiveData<List<UserData>> get() = _filteredCandidates
 
-
     private val generatedUserColors: MutableMap<Int, Color> = mutableMapOf()
 
     init {

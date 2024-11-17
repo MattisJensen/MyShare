@@ -3,8 +3,8 @@ package dk.sdu.myshare.business.model.friendship
 import dk.sdu.myshare.data.database.mock.LocalData
 
 class FriendshipRepository {
-    fun fetchFriendshipDataByID(id: Int): List<FriendshipData> {
-        LocalData.getFriendshipsForUserById(id)?.let {
+    fun fetchFriendshipById(userId: Int): List<FriendshipData> {
+        LocalData.getFriendshipsForUserById(userId)?.let {
             return it.map { friendship ->
                 FriendshipData(
                     userId1 = friendship.userId1,

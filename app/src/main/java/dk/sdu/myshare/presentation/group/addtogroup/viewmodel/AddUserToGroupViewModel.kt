@@ -2,6 +2,7 @@ package dk.sdu.myshare.presentation.group.addtogroup.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import dk.sdu.myshare.business.model.group.GroupData
 import dk.sdu.myshare.business.model.group.GroupRepository
 import dk.sdu.myshare.business.model.user.UserData
@@ -12,7 +13,7 @@ class AddUserToGroupViewModel(
     private val groupRepository: GroupRepository,
     private val currentUserId: Int,
     private val otherUserId: Int
-) {
+) : ViewModel() {
     private val _commonGroups: MutableLiveData<List<GroupData>> = MutableLiveData<List<GroupData>>()
     val commonGroups: LiveData<List<GroupData>> = _commonGroups
 
@@ -28,7 +29,7 @@ class AddUserToGroupViewModel(
 
     fun refreshGroups() {
         val groupsResult: List<GroupData> = groupRepository.fetchGroupWhereUserIsMember(currentUserId)
-        val commonGroupsResult = groupsResult.filter { groupData -> groupData.members.contains(otherUserId) }
+        val commonGroupsResult: List<GroupData> = groupsResult.filter { groupData -> groupData.members.contains(otherUserId) }
 
         val sortedGroups = groupsResult.sortedBy { it.name }
         val sortedCommon = commonGroupsResult.sortedBy { it.name }

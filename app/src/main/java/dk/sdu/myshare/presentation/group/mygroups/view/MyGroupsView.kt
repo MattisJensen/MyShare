@@ -47,7 +47,7 @@ fun MyGroupsView(navController: NavHostController, viewModel: MyGroupsViewModel)
 @Composable
 fun MyGroupsHeader() {
     Text(
-        text = "My Groups",
+        text = "Groups",
         fontWeight = FontWeight.Bold,
         style = MaterialTheme.typography.titleLarge
     )

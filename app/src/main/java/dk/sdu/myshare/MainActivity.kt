@@ -2,13 +2,16 @@ package dk.sdu.myshare
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -16,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dk.sdu.myshare.business.utility.ViewModelFactory
 import dk.sdu.myshare.presentation.Views
+import dk.sdu.myshare.presentation.friends.view.FriendsViewRoot
 import dk.sdu.myshare.presentation.group.addtogroup.view.AddUserToGroupViewRoot
 import dk.sdu.myshare.presentation.group.managegroupmember.view.ManageGroupMemberViewRoot
 import dk.sdu.myshare.presentation.group.opengroup.view.OpenGroupViewRoot
@@ -27,7 +31,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
+        setContent() {
             MyApp()
         }
     }
@@ -38,10 +42,14 @@ fun MyApp() {
     MyShareTheme {
         val navController = rememberNavController()
         Scaffold(
-            modifier = Modifier.fillMaxSize(),
-//            bottomBar = { BottomNavigationBar(navController) }
+            modifier = Modifier
+                .fillMaxSize(),
         ) { innerPadding ->
-            NavigationGraph(navController, Modifier.padding(innerPadding))
+            NavigationGraph(
+                navController,
+                Modifier
+                    .padding(innerPadding)
+            )
         }
     }
 }
@@ -53,7 +61,7 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modif
             HomeViewRoot(navController, ViewModelFactory.getHomeViewModel())
         }
 
-        composable(Views.OtherProfile.route ) { backStackEntry ->
+        composable(Views.OtherProfile.route) { backStackEntry ->
             val currentUserId = backStackEntry.arguments?.getString(Views.OtherProfile.key1)?.toInt() ?: 0
             val otherUserId = backStackEntry.arguments?.getString(Views.OtherProfile.key2)?.toInt() ?: 0
             OtherProfileViewRoot(navController, ViewModelFactory.getOtherProfileViewModel(currentUserId, otherUserId))
@@ -73,6 +81,10 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modif
             val currentUserId = backStackEntry.arguments?.getString(Views.AddUserToGroup.key1)?.toInt() ?: 0
             val otherUserId = backStackEntry.arguments?.getString(Views.AddUserToGroup.key2)?.toInt() ?: 0
             AddUserToGroupViewRoot(navController, ViewModelFactory.getAddUserToGroupViewModel(currentUserId, otherUserId))
+        }
+
+        composable(Views.FriendsView.route) {
+            FriendsViewRoot(navController, ViewModelFactory.getFriendsViewModel())
         }
     }
 }

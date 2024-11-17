@@ -1,5 +1,6 @@
 package dk.sdu.myshare.business.utility
 
+import dk.sdu.myshare.presentation.friends.viewmodel.FriendsViewModel
 import dk.sdu.myshare.presentation.group.addtogroup.viewmodel.AddUserToGroupViewModel
 import dk.sdu.myshare.presentation.group.managegroupmember.viewmodel.ManageGroupMemberViewModel
 import dk.sdu.myshare.presentation.group.mygroups.viewmodel.MyGroupsViewModel
@@ -30,5 +31,9 @@ object ViewModelFactory {
 
     fun getAddUserToGroupViewModel(currentUserId: Int, otherUserId: Int): AddUserToGroupViewModel {
         return AddUserToGroupViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository, currentUserId, otherUserId)
+    }
+
+    fun getFriendsViewModel(): FriendsViewModel {
+        return FriendsViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.friendshipRepository)
     }
 }

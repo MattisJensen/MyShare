@@ -25,4 +25,6 @@ sealed class Views(val route: String) {
         val key2: String = "otherUserId"
         fun createRoute(currentUserId: Int, otherUserId: Int) = "addusertogroup/$currentUserId/$otherUserId"
     }
+
+    object FriendsView : Views("friends")
 }
